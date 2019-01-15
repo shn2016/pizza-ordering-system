@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Pizza </title>
+  <script>
+    function main(){
+      const toppings = document.querySelectorAll('.toppings .topping');
+      toppings.forEach( (topping) => {
+          topping.onclick = () => {
+              topping.classList.toggle('active')
+          }
+      });
+  }
+
+    window.addEventListener('DOMContentLoaded', main);
+  </script>
+  <style>
+    body {
+      margin: 0;
+    }
+    .section {
+      padding: 1rem 2rem;
+    }
+    .details {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-gap: 1rem;
+    }
+    .form-control {
+      display: grid;
+      grid-gap: 0.5rem;
+    }
+    .form-control > label {
+      font-weight: bold;
+    }
+    .form-control > input {
+      background: #fff;
+      border-radius: 2px;
+      border: 1px solid #d7d7e7;
+      font-size: 1.5rem;
+      padding: 10px 15px;
+      outline: none;
+    }
+    .toppings {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-gap: 0.5rem;
+    }
+    .topping {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      grid-column-gap: 1rem;
+      align-items: center;
+      background: rgba(0,0,0,0.05);
+    }
+    .topping.active {
+      background: #1a98e1;
+      color: white;
+    }
+    .topping > .img {
+      padding: 5px;
+      background: #e6e6e6;
+    }
+    .topping img {
+      display: block;
+      width: 35px;
+      height: 35px;
+    }
+    .summary {
+      padding: 0;
+      list-style: none;
+    }
+    .summary > li {
+      display: grid;
+      grid-template-columns: 1fr auto;
+    }
+    .summary > li:not(:last-child) {
+      margin-bottom: 0.5rem;
+    }
+    .total {
+      text-align: right;
+      font-size: 1.25rem;
+    }
+    button[type="submit"] {
+      width: 100%;
+      background: #98C550;
+      border: none;
+      padding: 10px 15px;
+      text-align: center;
+      font-size: 1.5rem;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="section">
+    <h2>Enter Your Details</h2>
+    <div class="details">
+      <div class="form-control">
+        <label>NAME</label>
+        <input type="text">
+      </div>
+      <div class="form-control">
+        <label>EMAIL</label>
+        <input type="text">
+      </div>
+      <div class="form-control">
+        <label>CONFIRM EMAIL</label>
+        <input type="text">
+      </div>
+      <div class="form-control">
+        <label>ADDRESS</label>
+        <input type="text">
+      </div>
+      <div class="form-control">
+        <label>POST CODE</label>
+        <input type="text">
+      </div>
+      <div class="form-control">
+        <label>CONTACT NUMBER</label>
+        <input type="text">
+      </div>
+    </div>
+  </div>
+  <div class="section">
+    <h2>Pick Your Toppings</h2>
+    <div class="toppings">
+      <div class="topping active">
+        <div class="img">
+          <img src="https://toddmotto.com/angular-pizza-creator/assets/toppings/anchovy.svg" alt="anchovy">
+        </div>
+        <span>Anchovy</span>
+      </div>
+      <div class="topping">
+        <div class="img">
+          <img src="https://toddmotto.com/angular-pizza-creator/assets/toppings/bacon.svg" alt="bacon">
+        </div>
+        <span>Bacon</span>
+      </div>
+      <div class="topping">
+        <div class="img">
+          <img src="https://toddmotto.com/angular-pizza-creator/assets/toppings/basil.svg" alt="basil">
+        </div>
+        <span>Basil</span>
+      </div>
+      <div class="topping">
+        <div class="img">
+          <img src="https://toddmotto.com/angular-pizza-creator/assets/toppings/chili.svg" alt="chili">
+        </div>
+        <span>Chili</span>
+      </div>
+      <div class="topping">
+        <div class="img">
+          <img src="https://toddmotto.com/angular-pizza-creator/assets/toppings/mozzarella.svg" alt="mozzarella">
+        </div>
+        <span>Mozzarella</span>
+      </div>
+      <div class="topping">
+        <div class="img">
+          <img src="https://toddmotto.com/angular-pizza-creator/assets/toppings/mushroom.svg" alt="mushroom">
+        </div>
+        <span>Mushroom</span>
+      </div>
+      <div class="topping">
+        <div class="img">
+          <img src="https://toddmotto.com/angular-pizza-creator/assets/toppings/olive.svg" alt="olive">
+        </div>
+        <span>Olive</span>
+      </div>
+      <div class="topping">
+        <div class="img">
+          <img src="https://toddmotto.com/angular-pizza-creator/assets/toppings/onion.svg" alt="onion">
+        </div>
+        <span>Onion</span>
+      </div>
+    </div>
+  </div>
+  <div class="section">
+    <h2>Order Summary</h2>
+    <ul class="summary">
+      <li>
+        <span>Pizza</span>
+        <span>$9.99</span>
+      </li>
+      <li>
+        <span>Anchovy</span>
+        <span>$0.69</span>
+      </li>
+    </ul>
+    <hr>
+    <div class="total">
+      Total: $10.68
+    </div>
+  </div>
+  <div class="section">
+    <button type="submit">Place order</button>
+  </div>
+</body>
+</html>
