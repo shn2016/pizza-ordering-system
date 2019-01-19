@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<!-- saved from url=(0024)http://10.0.74.222:8080/ -->
+<html lang="en" class="gr__10_0_74_222"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Pizza Creator</title>
+  <style>
+    body {
+      margin: 0;
+    }
+    .section {
+      padding: 1rem 2rem;
+    }
+    .details {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-gap: 1rem;
+    }
+    .form-control {
+      display: grid;
+      grid-gap: 0.5rem;
+    }
+    .form-control > label {
+      font-weight: bold;
+      color: rgba(0,0,0,0.75);
+      font-size: 0.875rem;
+    }
+    .form-control > input {
+      background: #fff;
+      border-radius: 2px;
+      border: 1px solid #d7d7e7;
+      font-size: 1.25rem;
+      padding: 10px 15px;
+      outline: none;
+    }
+    .toppings {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-gap: 0.5rem;
+    }
+    .topping {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      grid-column-gap: 1rem;
+      align-items: center;
+      background: rgba(0,0,0,0.05);
+      cursor: pointer;
+      text-transform: capitalize;
+    }
+    .topping.active {
+      background: #1a98e1;
+      color: white;
+    }
+    .topping > .img {
+      padding: 5px;
+      background: #e6e6e6;
+    }
+    .topping img {
+      display: block;
+      width: 35px;
+      height: 35px;
+    }
+    .summary {
+      padding: 0;
+      list-style: none;
+    }
+    .summary > li {
+      display: grid;
+      grid-gap: 5px;
+      align-items: center;
+      grid-template-columns: auto auto auto 1fr auto;
+      text-transform: capitalize;
+    }
+    .summary > li:not(:last-child) {
+      margin-bottom: 0.5rem;
+    }
+    .total {
+      text-align: right;
+      font-size: 1.25rem;
+    }
+    button[type="submit"] {
+      width: 100%;
+      background: #98C550;
+      border: none;
+      padding: 10px 15px;
+      text-align: center;
+      font-size: 1.5rem;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    
+    button.amount {
+      width: 2rem;
+      height: 2rem;
+      border: 0;
+      outline: 0;
+      background: rgba(0,0,0,0.05);
+      border-radius: 50%;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button.amount:active {
+      background: #1a98e1;
+      color: white;
+    }
+
+    .modal {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      background: rgba(0,0,0,0.75);
+    }
+    
+    .modal-box {
+      border-top: 5px solid #98C550;
+      text-align: center;
+      background: white;
+      min-width: 400px;
+      margin-top: 10rem;
+      padding: 1rem 2.5rem;
+    }
+
+    .modal-box .address p {
+      margin: 0.5rem 0;
+    }
+
+    .modal-box hr {
+      margin: 1.5rem 0;
+    }
+
+    .modal-box .pizzas {
+      text-align: left;
+    }
+  
+    .modal-box .pizza {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+    }
+
+    .modal-box .actions {
+      margin-top: 3rem;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-column-gap: 1rem;
+    }
+
+    .modal-box .actions button {
+      background: transparent;
+      border: 0;
+      outline: 0;
+      font-size: 1rem;
+      font-weight: bold;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+    }
+
+    .modal-box .actions button.confirm {
+      background: #98C550;
+    }
+
+    .modal-box .actions button.cancel {
+      background: #e74c3c;
+    }
+  </style>
+  <script>
+    function onToppingClick(topping, state) {
+      const { selectedToppings } = state;
+      const isExists = state.selectedToppings.find(({ name }) => name === topping.name);
+  
+      const newSelectedToppings = !isExists 
+        ? [{ ...topping, amount: 1 }, ...selectedToppings] 
+        : selectedToppings.filter(({ name }) => name !== topping.name);
+
+      state.selectedToppings = newSelectedToppings;
+      render(state);
+    }
+
+    function onAddToppingClick(topping, state) {
+      const { selectedToppings } = state;
+
+      const newSelectedToppings = selectedToppings.map(selectedTopping => {
+        const { name } = selectedTopping;
+
+        if (name === topping.name) {
+          const { amount } = topping;
+          const newAmount = amount + 1;
+
+          return {
+            ...topping,
+            amount: newAmount,
+          }
+        }
+
+        return selectedTopping;
+      });
+
+      state.selectedToppings = newSelectedToppings;
+      render(state);
+    }
+
+    function onMinusToppingClick(topping, state) {
+      const { selectedToppings } = state;
+
+      const newSelectedToppings = selectedToppings.map(selectedTopping => {
+        const { name } = selectedTopping;
+
+        if (name === topping.name) {
+          const { amount } = topping;
+          const newAmount = amount - 1;
+
+          if (newAmount === 0) {
+            return undefined;
+          }
+
+          return {
+            ...topping,
+            amount: newAmount,
+          }
+        }
+
+        return selectedTopping;
+      });
+
+      state.selectedToppings = newSelectedToppings.filter(newSelectedTopping => !!newSelectedTopping);
+      render(state);
+    }
+
+    function renderSummary(state) {
+      const { selectedToppings } = state;
+      const parentNode = document.querySelector('ul.summary');
+      clearNode(parentNode);
+
+      selectedToppings.forEach(selectedTopping => {
+        const { name, amount, price } = selectedTopping;
+
+        const li = document.createElement('li');
+
+        const addButton = document.createElement('button');
+        addButton.classList.add('amount');
+        addButton.innerText = '+';
+        addButton.onclick = () => {
+          onAddToppingClick(selectedTopping, state);
+        }
+
+        const minusButton = document.createElement('button');
+        minusButton.classList.add('amount');
+        minusButton.innerText = '-';
+        minusButton.onclick = () => {
+          onMinusToppingClick(selectedTopping, state);
+        }
+
+        const nameSpan = document.createElement('span');
+        nameSpan.innerText = name;
+
+        const amountSpan = document.createElement('span');
+        amountSpan.innerText = `* ${amount}`;
+
+        const priceSpan = document.createElement('span');
+        priceSpan.innerText = `$ ${price}`;
+
+        li.append(addButton, minusButton, nameSpan, amountSpan, priceSpan);
+        parentNode.append(li);
+      });
+    }
+
+    function renderToppings(state) {
+      const { toppings, selectedToppings } = state;
+      const parentNode = document.querySelector('.toppings');
+      clearNode(parentNode);
+
+      toppings.forEach(topping => {
+        const { name: toppingName } = topping;
+        const container = document.createElement('div');
+        container.classList.add('topping');
+
+        if (selectedToppings.find(({ name }) => name === topping.name)) {
+          container.classList.add('active');
+        }
+
+        container.onclick = function() {
+          onToppingClick(topping, state);
+        };
+
+        const imageContainer = document.createElement('div');
+        imageContainer.classList.add('img');
+
+        const image = document.createElement('img');
+        image.alt = toppingName;
+        image.src = `https://toddmotto.com/angular-pizza-creator/assets/toppings/${toppingName}.svg`;
+
+        const name = document.createElement('span');
+        name.innerText = toppingName;
+        
+        imageContainer.append(image);
+        container.append(imageContainer, name);
+
+        parentNode.append(container);
+      });
+    }
+
+    function clearNode(node) {
+      while (node.firstChild) {
+        node.removeChild(node.firstChild);
+      }
+    }
+
+    function render(state) {
+      renderToppings(state);
+      renderSummary(state);
+    }
+
+    function renderModal(state){
+      const { isDisplayed ,details , selectedToppings } = state;
+      const parentNode = document.querySelector('.confirmation-modal');
+      clearNode(parentNode);
+
+      const {name, email, address, phone, postcode} = details;
+
+      const div = document.createElement("div");
+      const h1 = document.createElement("h1");
+      h1.innerHTML="Your order details";
+
+      const addressDiv = document.createElement("div");
+      addressDiv.classList.add("address");
+      const nameP = document.createElement("p");
+      nameP.innerHTML=name;
+      const addressP = document.createElement("p");
+      addressP.innerHTML=address;
+      const postcodeP = document.createElement("p");
+      postcodeP.innerHTML=postcode;
+      const phoneP = document.createElement("p");
+      phoneP=phone;
+      
+      addressDiv.append(nameP,addressP,postcodeP,phoneP);
+
+      const hr =document.createElement('hr');
+
+      const pizzaDiv = document.createElement("div");
+      const {name, amount} = selectedToppings
+      
+    }
+    function main() {
+      const toppings = [{
+        name: 'anchovy',
+        price: '0.69',
+      }, {
+        name: 'bacon',
+        price: '0.69',
+      }, {
+        name: 'basil',
+        price: '0.69',
+      }, {
+        name: 'chili',
+        price: '0.69',
+      }, {
+        name: 'mozzarella',
+        price: '0.69',
+      }, {
+        name: 'mushroom',
+        price: '0.69',
+      }, {
+        name: 'olive',
+        price: '0.69',
+      }, {
+        name: 'onion',
+        price: '0.69',
+      }];
+
+      const details = [];
+      const selectedToppings = [];
+      const isDisplayed = false;
+      const state = {
+        details,
+        isDisplayed,
+        toppings,
+        selectedToppings,
+      };
+
+      window.state = state;
+
+      render(state);
+
+      document.querySelector('button[type="reset"]').onclick = () => {
+        state.selectedToppings = [];
+        render(state);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', main);
+  </script>
+</head>
+<body data-gr-c-s-loaded="true">
+  <div class="confirmation-modal">
+  <div class="modal">
+    <div class="modal-box">
+      <h1>Your Order Details</h1>
+      <div class="address">
+        <p><strong>Long Zhao</strong></p>
+        <p>6456 Heloise Inlet</p>
+        <p>Melbourne 3000</p>
+        <p>0416413665</p>
+      </div>
+      <hr>
+      <div class="pizzas">
+        <div class="pizza">
+          <div class="item">
+            <strong>Large Pizza</strong>
+            <br>
+            Onion * 1, Bacon * 2
+          </div>
+          <div class="price">$10.99</div>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="cancel">Cancel</button>
+        <button class="confirm">Confirm</button>
+      </div>
+    </div>
+  </div>
+  </div>
+  <div class="section">
+    <h2>Enter Your Details</h2>
+    <div class="details">
+      <div class="form-control">
+        <label>NAME</label>
+        <input type="text" name="name" id="myId">
+      </div>
+      <div class="form-control">
+        <label>EMAIL</label>
+        <input type="text" name="email">
+      </div>
+      <div class="form-control">
+        <label>CONFIRM EMAIL</label>
+        <input type="text" name="confirmEmail">
+      </div>
+      <div class="form-control">
+        <label>ADDRESS</label>
+        <input type="text" name="address">
+      </div>
+      <div class="form-control">
+        <label>POST CODE</label>
+        <input type="text" name="postCode">
+      </div>
+      <div class="form-control">
+        <label>CONTACT NUMBER</label>
+        <input type="text" name="contactNumber">
+      </div>
+    </div>
+  </div>
+  <div class="section">
+    <h2>Pick Your Toppings</h2>
+    <div class="toppings"><div class="topping"><div class="img"><img alt="anchovy" src="./Pizza Creator_files/anchovy.svg"></div><span>anchovy</span></div><div class="topping"><div class="img"><img alt="bacon" src="./Pizza Creator_files/bacon.svg"></div><span>bacon</span></div><div class="topping"><div class="img"><img alt="basil" src="./Pizza Creator_files/basil.svg"></div><span>basil</span></div><div class="topping"><div class="img"><img alt="chili" src="./Pizza Creator_files/chili.svg"></div><span>chili</span></div><div class="topping"><div class="img"><img alt="mozzarella" src="./Pizza Creator_files/mozzarella.svg"></div><span>mozzarella</span></div><div class="topping"><div class="img"><img alt="mushroom" src="./Pizza Creator_files/mushroom.svg"></div><span>mushroom</span></div><div class="topping"><div class="img"><img alt="olive" src="./Pizza Creator_files/olive.svg"></div><span>olive</span></div><div class="topping"><div class="img"><img alt="onion" src="./Pizza Creator_files/onion.svg"></div><span>onion</span></div></div>
+  </div>
+  <div class="section">
+    <h2>Order Summary</h2>
+    <ul class="summary"></ul>
+    <hr>
+    <div class="total" data-total="9.99">
+      Total: $9.99
+    </div>
+  </div>
+  <div class="section">
+    <button type="submit">Place order</button>
+    <button type="reset">Clear</button>
+  </div>
+<!-- Code injected by live-server -->
+<script type="text/javascript">
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function() {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					head.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					head.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function(msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			console.log('Live reload enabled.');
+		})();
+	}
+	// ]]>
+</script>
+
+</body></html>

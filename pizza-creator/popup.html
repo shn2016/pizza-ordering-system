@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <style>
+            .wrapper{
+                position:fixed;
+                top:0;
+                right:0;
+                left:0;
+                bottom:0;
+                background-color: rgba(0, 0, 0, 0.65);
+                display: flex;
+                justify-content:center;
+                align-items: flex-start;
+
+            }
+
+            .signup{
+                position:relative;
+                display: flex;
+                flex-direction: column;
+                background-color:white;
+                min-width: 400px;
+                margin-top:10rem;
+                justify-content:center;
+                align-items: flex-start;
+                padding-left: 1rem;
+            }
+
+            .close{
+                position:absolute;
+                right:0.15rem;
+                top:0.15rem;
+            }
+            .email {
+                display: flex;
+                flex-direction: column;
+                margin-bottom: 1rem;
+            }
+
+        </style>
+    </head>
+    <body>
+        <div class="wrapper">
+            <div class="signup">
+                <h3>SIGN UP</h3>
+                <hr>
+                <button class="close">X</button>
+                <div class="email">
+                    <label>Email</label>
+                    <input>
+                </div>
+                <div class="email">
+                <label>Password</label>
+                <input>
+                </div>
+                <div class="email">
+                    <label>Confirm Password</label>
+                    <input>
+                </div>
+                <div class="terms">
+                    <checkbox></checkbox><span>I have read and agree to the term and condition</span>
+                </div>
+                <button>Confirm Sign Up</button>
+            </div>
+        </div>
+    </body>
+</html>
