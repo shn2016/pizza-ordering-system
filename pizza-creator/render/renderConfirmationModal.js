@@ -1,5 +1,5 @@
 function renderConfirmationModal(state) {
-    const { isDisplayConfirmationModal, selectedSize,selectedToppings } = state;
+    const { isDisplayConfirmationModal, selectedSize,selectedToppings, customer } = state;
 
     const parentNode = document.querySelector('.confirmation-modal');
     clearNode(parentNode);
@@ -23,17 +23,17 @@ function renderConfirmationModal(state) {
     
     const nameP = document.createElement('p');
     const nameStrong = document.createElement('strong');
-    nameStrong.innerText = 'Long Zhao';
+    nameStrong.innerText = customer.name;
     nameP.append(nameStrong);
 
     const streetP = document.createElement('p');
-    streetP.innerText = '6456 Heloise Inlet';
+    streetP.innerText = customer.address;
 
     const cityP = document.createElement('p');
-    cityP.innerText = 'Melbourne 3000';
+    cityP.innerText = `VIC ${customer.postcode}`;
 
     const numberP = document.createElement('p');
-    numberP.innerText = '0416413665';
+    numberP.innerText = customer.mobile;
 
     addressDiv.append(nameP, streetP, cityP, numberP);
 
@@ -48,21 +48,22 @@ function renderConfirmationModal(state) {
     const itemDiv = document.createElement('div');
     
     const itemStrong = document.createElement('strong');
-    itemStrong.innerText = selectedSize.name;
+    itemStrong.innerText = `${selectedSize.name} Pizza`;
 
     const itemBr = document.createElement('br');
     const itemSpan = document.createElement('span');
     let toppingSummary = '';
     selectedToppings.forEach(selectedTopping => {
         const {name, amount} = selectedTopping;
-        toppingSummary += `${name} * ${amount}`;
+        toppingSummary += ` ${name.charAt(0).toUpperCase()+name.slice(1)} * ${amount} `;
     });
     itemSpan.innerText = toppingSummary;
 
     itemDiv.append(itemStrong, itemBr, itemSpan);
 
     const priceDiv = document.createElement('div');
-    priceDiv.innerText = '$10.99';
+    const totalPrice = getTotal(state);
+    priceDiv.innerText = `$${totalPrice}`;
 
     pizzaDiv.append(itemDiv, priceDiv);
 
@@ -76,7 +77,7 @@ function renderConfirmationModal(state) {
     cancelButton.innerText = 'Cancel';
     cancelButton.onclick = () => {
       state.isDisplayConfirmationModal = false;
-      render(state);
+      renderConfirmationModal(state);
     };
 
     const confirmButton = document.createElement('button');

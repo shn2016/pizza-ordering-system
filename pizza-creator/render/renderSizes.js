@@ -14,7 +14,9 @@ function renderSizes(state) {
 
       imageContainer.onclick = function() {
         state.selectedSize = pizzaSize;
-        render(state);
+        renderSizes(state);
+        renderSummary(state);
+        renderTotal(state);
       };
 
       imageContainer.classList.add('img');

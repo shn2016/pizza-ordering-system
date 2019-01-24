@@ -1,9 +1,3 @@
-
-
-  
-  
-  
-  
   function clearNode(node) {
     while (node.firstChild) {
       node.removeChild(node.firstChild);
@@ -52,13 +46,17 @@
 
     const selectedSize = null;
 
-    const info = ['name','email', 'confirm email', 'address', 'post code', 'contact number'] ;
-    const pizzaSizes =[{name:'Large', size:'(13\')' }
-      ,{name:'Medium' ,size:'(11\')'}
-      ,{name:'Small' ,size:'(9\')'}];
+    const info = ['name','email', 'confirm email', 'address', 'postcode', 'mobile'] ;
+
+    const customer = { name: '', email :'', address:'', postcode:'',mobile:'' };
+
+    const pizzaSizes =[{name:'Large', size:'(13\')', price:'13', }
+      ,{name:'Medium' ,size:'(11\')', price:'11',}
+      ,{name:'Small' ,size:'(9\')', price:'9',}];
 
     const state = {
       info,
+      customer,
       pizzaSizes,
       selectedSize,
       toppings,
@@ -72,12 +70,14 @@
 
     document.querySelector('button[type="reset"]').onclick = () => {
       state.selectedToppings = [];
+      state.customer = { name: '', email :'', address:'', postcode:'',mobile:'' };
+      state.selectedSize = null;
       render(state);
     }
 
     document.querySelector('button[type="submit"]').onclick = () => {
       state.isDisplayConfirmationModal = true;
-      render(state);
+      renderConfirmationModal(state);
     };
   }
 
