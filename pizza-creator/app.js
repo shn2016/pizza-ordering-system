@@ -46,13 +46,46 @@
 
     const selectedSize = null;
 
-    const info = ['name','email', 'confirm email', 'address', 'postcode', 'mobile'] ;
+    const info = [{
+      column:'name',
+      value:null
+    },{
+      column:'email',
+      value:null
+    },{
+      column:'confirm email',
+      value:null
+    },{
+      column:'address',
+      value:null
+    },{
+      column:'postcode',
+      value:null
+    },{
+      column:'contact number',
+      value:null
+    }];
 
-    const customer = { name: '', email :'', address:'', postcode:'',mobile:'' };
+    const customer = { 
+      name: null, 
+      email :null, 
+      address:null, 
+      postcode:null,
+      'contact number':null 
+    };
 
-    const pizzaSizes =[{name:'Large', size:'(13\')', price:'13', }
-      ,{name:'Medium' ,size:'(11\')', price:'11',}
-      ,{name:'Small' ,size:'(9\')', price:'9',}];
+    const pizzaSizes =[{
+      name:'Large', 
+      size:'13', 
+      price:'13',
+    },{
+       name:'Medium',
+       size:'11', 
+       price:'11',
+    },{
+      name:'Small',
+      size:'9',
+      price:'9',}];
 
     const state = {
       info,
@@ -70,7 +103,15 @@
 
     document.querySelector('button[type="reset"]').onclick = () => {
       state.selectedToppings = [];
-      state.customer = { name: '', email :'', address:'', postcode:'',mobile:'' };
+      // state.customer = { name: '', email :'', address:'', postcode:'',mobile:'' };
+      Object.keys(state.customer).forEach( thing => {
+        state.customer[thing]=null;
+      });
+      const newInfo = info.map(element =>{
+        const {column} = element;
+        return {column, value:null};
+      })
+      state.info = newInfo;
       state.selectedSize = null;
       render(state);
     }

@@ -14,9 +14,7 @@ function renderSizes(state) {
 
       imageContainer.onclick = function() {
         state.selectedSize = pizzaSize;
-        renderSizes(state);
-        renderSummary(state);
-        renderTotal(state);
+        render(state);
       };
 
       imageContainer.classList.add('img');
@@ -27,31 +25,12 @@ function renderSizes(state) {
       pizzaImg.src = './pizza.svg';
       pizzaImg.classList.add('pizzaImg');
       const nameSpan = document.createElement('span');
-      nameSpan.innerText = `${name}  ${size}`;
+      nameSpan.innerText = `${name}  (${size}')`;
       
       imageContainer.append(pizzaImg, nameSpan);
 
-      
-      
       parentNode.append(imageContainer);
     }
     )
 
   }
-
-//   function onSizeClick(pizzaSize, state) {
-//     let { selectedSize } = state;
-//     // const isExists = state.selectedSize.find(({ pizza }) => pizza === pizzaSize);
-//     // // const {name, size } = pizzaSize;
-//     // const newSelectedSize = !isExists 
-//     //   ? [pizzaSize, ...selectedSize] 
-//     //   : selectedSize.filter(({ pizza }) => pizza !== pizzaSize);
-
-//     // state.selectedSize = newSelectedSize;
-//     if (selectedSize === pizzaSize){
-//         selectedSize = null;
-//     } else{
-//         selectedSize = pizzaSize;
-//     }
-//     render(state);
-//   }

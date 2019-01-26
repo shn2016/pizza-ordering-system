@@ -8,6 +8,10 @@ function renderConfirmationModal(state) {
       return;
     }
 
+    if(validatingInputRequirement(state)){
+      return;
+    };
+
     const modalDiv = document.createElement('div');
     modalDiv.classList.add('modal');
 
@@ -33,7 +37,7 @@ function renderConfirmationModal(state) {
     cityP.innerText = `VIC ${customer.postcode}`;
 
     const numberP = document.createElement('p');
-    numberP.innerText = customer.mobile;
+    numberP.innerText = customer['contact number'];    
 
     addressDiv.append(nameP, streetP, cityP, numberP);
 
@@ -77,7 +81,7 @@ function renderConfirmationModal(state) {
     cancelButton.innerText = 'Cancel';
     cancelButton.onclick = () => {
       state.isDisplayConfirmationModal = false;
-      renderConfirmationModal(state);
+      render(state);
     };
 
     const confirmButton = document.createElement('button');
@@ -90,3 +94,30 @@ function renderConfirmationModal(state) {
 
     parentNode.append(modalDiv);
   } 
+
+
+  function validatingInputRequirement(state){
+    const { selectedSize, info } = state;
+    let isAlert = false;
+    let message = 'Warning: Please fill up the follow input box: ';
+
+    info.forEach( ({column, value}) => {
+      if(value === null){
+        message += `\n ${column} `;
+        isAlert = true;
+      }
+    });
+
+    if(isAlert){
+      alert(message);
+      state.isDisplayConfirmationModal = false;
+    }
+    
+    if (selectedSize === null) {
+      isAlert = true;
+      alert('Please select a pizza.');
+      state.isDisplayConfirmationModal = false;
+    }
+
+    return isAlert;
+  }

@@ -57,9 +57,7 @@ function renderToppings(state) {
     });
 
     state.selectedToppings = newSelectedToppings.filter(newSelectedTopping => !!newSelectedTopping);
-    renderToppings(state);
-    renderSummary(state);
-    renderTotal(state);
+    render(state);
   }
 
   function onAddToppingClick(topping, state) {
@@ -82,9 +80,7 @@ function renderToppings(state) {
     });
 
     state.selectedToppings = newSelectedToppings;
-    renderToppings(state);
-    renderSummary(state);
-    renderTotal(state);
+    render(state);
   }
 
   function onToppingClick(topping, state) {
@@ -100,8 +96,5 @@ function renderToppings(state) {
     if( selectedSize === null ){
       state.selectedSize = pizzaSizes[2];
     }
-    renderSizes(state);
-    renderToppings(state);
-    renderSummary(state);
-    renderTotal(state);
+    render(state);
   }
