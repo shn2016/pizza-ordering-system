@@ -1,11 +1,11 @@
-import clearNode from "../helper/clearNode";
-import render from '../src/render';
+import render from '../render';
 
 export default function renderSizes(state) {
     const { pizzaSizes } = state;
     let {selectedSize} = state;
-    const parentNode = document.querySelector('.pizza-size');
-    clearNode(parentNode);
+    
+    const rootElement = document.createElement('div');
+    rootElement.classList.add('pizza-size');
 
     pizzaSizes.forEach(pizzaSize => {
       const { name, size } = pizzaSize;
@@ -32,8 +32,8 @@ export default function renderSizes(state) {
       
       imageContainer.append(pizzaImg, nameSpan);
 
-      parentNode.append(imageContainer);
+      rootElement.append(imageContainer);
     }
     )
-
+    return rootElement;
   }

@@ -1,11 +1,9 @@
-import clearNode from "../helper/clearNode";
-import render from '../src/render';
 
-export default function renderToppings(state) {
-    const { toppings, selectedToppings } = state;
-    const parentNode = document.querySelector('.toppings');
-    clearNode(parentNode);
+export default function renderToppings({ toppings, selectedToppings ,onToppingClick}) {
 
+    const rootElement = document.createElement('div');
+    rootElement.classList.add('toppings');
+    
     toppings.forEach(topping => {
       const { name: toppingName } = topping;
       const container = document.createElement('div');
@@ -16,7 +14,7 @@ export default function renderToppings(state) {
       }
 
       container.onclick = function() {
-        onToppingClick(topping, state);
+        onToppingClick(topping);
       };
 
       const imageContainer = document.createElement('div');
@@ -32,11 +30,14 @@ export default function renderToppings(state) {
       imageContainer.append(image);
       container.append(imageContainer, name);
 
-      parentNode.append(container);
+      rootElement.append(container);
     });
+
+    return rootElement;
+
   }
 
-  function onMinusToppingClick(topping, state) {
+   function onMinusToppingClick(topping, state) {
     const { selectedToppings } = state;
 
     const newSelectedToppings = selectedToppings.map(selectedTopping => {
@@ -86,18 +87,4 @@ export default function renderToppings(state) {
     render(state);
   }
 
-  function onToppingClick(topping, state) {
-    const { selectedToppings, selectedSize, pizzaSizes } = state;
-    const isExists = state.selectedToppings.find(({ name }) => name === topping.name);
-
-    const newSelectedToppings = !isExists 
-      ? [{ ...topping, amount: 1 }, ...selectedToppings] 
-      : selectedToppings.filter(({ name }) => name !== topping.name);
-
-    state.selectedToppings = newSelectedToppings;
-    
-    if( selectedSize === null ){
-      state.selectedSize = pizzaSizes[2];
-    }
-    render(state);
-  }
+  

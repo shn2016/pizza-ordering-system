@@ -1,14 +1,8 @@
-import clearNode from "../helper/clearNode";
-import render from '../src/render';
 
 export default function renderSummary(state) {
     const { selectedToppings, selectedSize } = state;
-    const parentNode = document.querySelector('ul.summary');
-    clearNode(parentNode);
-
-    // if (typeof selectedToppings === 'undefined' || selectedToppings.length == 0) {
-    //   return;
-    // }
+    const rootElement = document.createElement('ul');
+    rootElement.classList.add('summary');
 
     if(selectedSize !== null){
       const { name, price} =  selectedSize;
@@ -21,7 +15,7 @@ export default function renderSummary(state) {
       const priceSpan = document.createElement("span");
       priceSpan.innerHTML = `$${price}`;
       li.append (simpleSpan1, simpleSpan2, piizaSpan, simpleSpan3, priceSpan);
-      parentNode.append(li);
+      rootElement.append(li);
     }
 
     selectedToppings.forEach(selectedTopping => {
@@ -55,6 +49,8 @@ export default function renderSummary(state) {
       priceSpan.innerText = `$ ${amountPrice}`;
 
       li.append(addButton, minusButton, nameSpan, amountSpan, priceSpan);
-      parentNode.append(li);
+      rootElement.append(li);
     });
+
+    return rootElement;
   }

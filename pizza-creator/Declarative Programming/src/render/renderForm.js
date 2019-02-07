@@ -1,10 +1,10 @@
-import clearNode from "../helper/clearNode";
-import render from '../src/render';
+import render from '../render';
 
 export default function renderForm(state){
-    const parentNode = document.querySelector('.section .details');
-    const { info, customer} = state;
-    clearNode(parentNode);
+    const rootElement = document.createElement('div');
+    rootElement.classList.add('details');
+
+    const { info } = state;
     info.forEach( ({column, value}) => { 
         const div = document.createElement('div');
         div.classList.add('form-control');
@@ -23,8 +23,9 @@ export default function renderForm(state){
         }
 
         div.append(label,input);
-        parentNode.append(div);
+        rootElement.append(div);
     });
+    return rootElement;
 }
 
 function onFormChange(column, input, state){

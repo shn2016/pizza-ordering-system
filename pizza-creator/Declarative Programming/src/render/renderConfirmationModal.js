@@ -1,6 +1,6 @@
 import clearNode from "../helper/clearNode";
 import getTotal from "../helper/getTotal";
-import render from '../src/render';
+import render from '../render';
 
 export default function renderConfirmationModal(state) {
     const { isDisplayConfirmationModal, selectedSize,selectedToppings, customer } = state;
@@ -11,7 +11,6 @@ export default function renderConfirmationModal(state) {
     if (!isDisplayConfirmationModal) {
       return;
     }
-
     if(validatingInputRequirement(state)){
       return;
     };
