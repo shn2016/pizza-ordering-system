@@ -4,10 +4,11 @@ import renderToppings from '../render/renderToppings';
 import renderSummary from '../render/renderSummary';
 import renderConfirmationModal from '../render/renderConfirmationModal';
 import renderTotal from '../render/renderTotal';
+import clearNode from '../helper/clearNode';
 
 export default function render(state) {
     const rootElement = document.querySelector('#app');
-
+    clearNode(rootElement);
     const confirmationModalContainer = document.createElement('div');
     confirmationModalContainer.classList.add('confirmation-modal');
 
