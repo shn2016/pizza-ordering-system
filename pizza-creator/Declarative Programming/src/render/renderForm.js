@@ -1,8 +1,7 @@
-export default function renderForm(state){
+export default function renderForm({info, onFormChange}){
     const rootElement = document.createElement('div');
     rootElement.classList.add('details');
 
-    const { info } = state;
     info.forEach( ({column, value}) => { 
         const div = document.createElement('div');
         div.classList.add('form-control');
@@ -17,7 +16,7 @@ export default function renderForm(state){
         if (value){input.value=value};
         
         input.onchange = function() {
-            onFormChange(column, input, info);
+            onFormChange(column, input);
         }
 
         div.append(label,input);
@@ -26,30 +25,3 @@ export default function renderForm(state){
     return rootElement;
 }
 
-function onFormChange(column, input, info){
-    
-    const newInfo = info.map(singleInfo => {
-        const {column: newColumn} = singleInfo;
-
-        if( newColumn === column && column === 'confirm email' && state.customer['email'] !==input.value){
-            alert('Please fill the previous box first or make sure they are matched');
-            return {
-                column,
-                value: null,
-            };
-        }
-        if (newColumn === column){
-            const newValue = input.value;
-            return {
-                column, 
-                value: newValue,
-            }
-        }        
-        return singleInfo;
-    })
-    state.info = newInfo;
-
-    if (column !=='confirm email'){
-        state.customer[column] = input.value;
-    }
-}

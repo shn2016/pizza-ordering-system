@@ -1,17 +1,23 @@
 import clearNode from "../helper/clearNode";
 import getTotal from "../helper/getTotal";
 
-export default function renderConfirmationModal(state) {
-    const { isDisplayConfirmationModal, selectedSize,selectedToppings, customer } = state;
-
-    const parentNode = document.querySelector('.confirmation-modal');
-    clearNode(parentNode);
+export default function renderConfirmationModal({ 
+  isDisplayConfirmationModal, 
+  selectedSize,
+  selectedToppings, 
+  customer, 
+  info,
+  validatingInputRequirement,
+  onCancelButtonClick 
+}) {
+    const rootElement = document.createElement('div');
+    rootElement.classList.add('confirmation-modal')
 
     if (!isDisplayConfirmationModal) {
-      return;
+      return rootElement;
     }
-    if(validatingInputRequirement(state)){
-      return;
+    if(validatingInputRequirement(selectedSize, info)){
+      return rootElement;
     };
 
     const modalDiv = document.createElement('div');
@@ -68,7 +74,7 @@ export default function renderConfirmationModal(state) {
     itemDiv.append(itemStrong, itemBr, itemSpan);
 
     const priceDiv = document.createElement('div');
-    const totalPrice = getTotal(state);
+    const totalPrice = getTotal({ selectedToppings, selectedSize });
     priceDiv.innerText = `$${totalPrice}`;
 
     pizzaDiv.append(itemDiv, priceDiv);
@@ -82,7 +88,7 @@ export default function renderConfirmationModal(state) {
     cancelButton.classList.add('cancel');
     cancelButton.innerText = 'Cancel';
     cancelButton.onclick = () => {
-      state.isDisplayConfirmationModal = false;
+      onCancelButtonClick();
     };
 
     const confirmButton = document.createElement('button');
@@ -93,32 +99,8 @@ export default function renderConfirmationModal(state) {
 
     modalBoxDiv.append(h1, addressDiv, hr, pizzasDiv, actionsDiv);
 
-    parentNode.append(modalDiv);
+    rootElement.append(modalDiv);
+    return rootElement;
   } 
 
 
-  function validatingInputRequirement(state){
-    const { selectedSize, info } = state;
-    let isAlert = false;
-    let message = 'Warning: Please fill up the follow input box: ';
-
-    info.forEach( ({column, value}) => {
-      if(value === null){
-        message += `\n ${column} `;
-        isAlert = true;
-      }
-    });
-
-    if(isAlert){
-      alert(message);
-      state.isDisplayConfirmationModal = false;
-    }
-    
-    if (selectedSize === null) {
-      isAlert = true;
-      alert('Please select a pizza.');
-      state.isDisplayConfirmationModal = false;
-    }
-
-    return isAlert;
-  }

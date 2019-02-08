@@ -1,6 +1,5 @@
-export default function getTotal(state){
+export default function getTotal({ selectedToppings, selectedSize }){
     let totalPrice = 0;
-    const { selectedToppings, selectedSize } = state;
 
     selectedToppings.forEach( ({price, amount}) => { 
         totalPrice += amount * price;

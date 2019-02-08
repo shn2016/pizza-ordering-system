@@ -1,5 +1,8 @@
-export default function renderToppings(props) {
-    const {toppings, selectedToppings, onToppingClick } = props;
+export default function renderToppings({
+  toppings, 
+  selectedToppings, 
+  onToppingClick 
+}) {
     const rootElement = document.createElement('div');
     rootElement.classList.add('toppings');
     

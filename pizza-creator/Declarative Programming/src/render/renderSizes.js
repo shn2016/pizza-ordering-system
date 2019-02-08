@@ -1,9 +1,11 @@
 import pizza from '../images/pizza.svg';
 
-export default function renderSizes(state) {
-    const { pizzaSizes } = state;
-    let {selectedSize} = state;
-    
+export default function renderSizes({ 
+  pizzaSizes, 
+  selectedSize, 
+  onPizzaSizeSelected
+}) {
+   
     const rootElement = document.createElement('div');
     rootElement.classList.add('pizza-size');
 
@@ -16,7 +18,7 @@ export default function renderSizes(state) {
       };
 
       imageContainer.onclick = function() {
-        state.selectedSize = pizzaSize;
+        onPizzaSizeSelected(pizzaSize);
       };
 
       imageContainer.classList.add('img');
