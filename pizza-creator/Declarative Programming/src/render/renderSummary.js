@@ -1,6 +1,10 @@
 
-export default function renderSummary(state) {
-    const { selectedToppings, selectedSize } = state;
+export default function renderSummary({
+  selectedToppings, 
+  selectedSize,
+  onAddToppingClick,
+  onMinusToppingClick,
+}) {
     const rootElement = document.createElement('ul');
     rootElement.classList.add('summary');
 
@@ -27,14 +31,14 @@ export default function renderSummary(state) {
       addButton.classList.add('amount');
       addButton.innerText = '+';
       addButton.onclick = () => {
-        onAddToppingClick(selectedTopping, state);
+        onAddToppingClick(selectedTopping);
       }
 
       const minusButton = document.createElement('button');
       minusButton.classList.add('amount');
       minusButton.innerText = '-';
       minusButton.onclick = () => {
-        onMinusToppingClick(selectedTopping, state);
+        onMinusToppingClick(selectedTopping);
       }
 
       const nameSpan = document.createElement('span');

@@ -1,6 +1,5 @@
-
-export default function renderToppings({ toppings, selectedToppings ,onToppingClick}) {
-
+export default function renderToppings(props) {
+    const {toppings, selectedToppings, onToppingClick } = props;
     const rootElement = document.createElement('div');
     rootElement.classList.add('toppings');
     
@@ -12,10 +11,9 @@ export default function renderToppings({ toppings, selectedToppings ,onToppingCl
       if (selectedToppings.find(({ name }) => name === topping.name)) {
         container.classList.add('active');
       }
-
       container.onclick = function() {
         onToppingClick(topping);
-      };
+       };
 
       const imageContainer = document.createElement('div');
       imageContainer.classList.add('img');
@@ -37,54 +35,6 @@ export default function renderToppings({ toppings, selectedToppings ,onToppingCl
 
   }
 
-   function onMinusToppingClick(topping, state) {
-    const { selectedToppings } = state;
-
-    const newSelectedToppings = selectedToppings.map(selectedTopping => {
-      const { name } = selectedTopping;
-
-      if (name === topping.name) {
-        const { amount } = topping;
-        const newAmount = amount - 1;
-
-        if (newAmount === 0) {
-          return undefined;
-        }
-
-        return {
-          ...topping,
-          amount: newAmount,
-        }
-      }
-
-      return selectedTopping;
-    });
-
-    state.selectedToppings = newSelectedToppings.filter(newSelectedTopping => !!newSelectedTopping);
-    render(state);
-  }
-
-  function onAddToppingClick(topping, state) {
-    const { selectedToppings } = state;
-
-    const newSelectedToppings = selectedToppings.map(selectedTopping => {
-      const { name } = selectedTopping;
-
-      if (name === topping.name) {
-        const { amount } = topping;
-        const newAmount = amount + 1;
-
-        return {
-          ...topping,
-          amount: newAmount,
-        }
-      }
-
-      return selectedTopping;
-    });
-
-    state.selectedToppings = newSelectedToppings;
-    render(state);
-  }
+  
 
   

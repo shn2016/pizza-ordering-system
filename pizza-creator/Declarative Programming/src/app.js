@@ -12,7 +12,7 @@ import customer from './data/customer';
 
 export default class App { 
   constructor(){
-    
+
       this.state = {
       info,
       customer,
@@ -22,12 +22,16 @@ export default class App {
       selectedToppings: [],
       isDisplayConfirmationModal: false,
     };
+
+    this.onToppingClick = this.onToppingClick.bind(this); 
+    this.onMinusToppingClick = this.onMinusToppingClick.bind(this); 
+    this.onAddToppingClick = this.onAddToppingClick.bind(this); 
+
     this.render();
+  }; 
 
-    this.onToppingClick=this.onToppingClick.bind(this); 
+  onToppingClick(topping) {
 
-  }
-  onToppingClick(topping){
     const { selectedToppings, selectedSize, pizzaSizes } = this.state;
     const isExists = this.state.selectedToppings.find(({ name }) => name === topping.name);
 
@@ -44,6 +48,55 @@ export default class App {
      this.render(this.state);
   };
 
+   onMinusToppingClick(topping) {
+    const { selectedToppings } = this.state;
+
+    const newSelectedToppings = selectedToppings.map(selectedTopping => {
+      const { name } = selectedTopping;
+
+      if (name === topping.name) {
+        const { amount } = topping;
+        const newAmount = amount - 1;
+
+        if (newAmount === 0) {
+          return undefined;
+        }
+
+        return {
+          ...topping,
+          amount: newAmount,
+        }
+      }
+
+      return selectedTopping;
+    });
+
+    this.state.selectedToppings = newSelectedToppings.filter(newSelectedTopping => !!newSelectedTopping);
+    this.render(this.state);
+  }
+
+   onAddToppingClick(topping) {
+    const { selectedToppings } = this.state;
+
+    const newSelectedToppings = selectedToppings.map(selectedTopping => {
+      const { name } = selectedTopping;
+      if (name === topping.name) {
+        const { amount } = topping;
+        const newAmount = amount + 1;
+
+        return {
+          ...topping,
+          amount: newAmount,
+        }
+      }
+      return selectedTopping;
+    });
+
+    this.state.selectedToppings = newSelectedToppings;
+    this.render(this.state);
+  }
+
+  
   render(){
     const rootElement = document.querySelector('#app');
     clearNode(rootElement);
@@ -69,15 +122,22 @@ export default class App {
     toppingsContainer.classList.add('section');
     const toppingH2 = document.createElement('h2');
     toppingH2.innerHTML = 'Pick Your Toppings';
-     
-    toppingsContainer.append(toppingH2,renderToppings(this.state));
+    const result = renderToppings({
+      ...this.state,
+      onToppingClick: this.onToppingClick,
+    });
+
+    toppingsContainer.append(toppingH2,result);
 
     const summaryContainer = document.createElement('div');    
     summaryContainer.classList.add('section');
     const summaryH2 = document.createElement('h2');
     summaryH2.innerHTML = 'Pick Your Toppings'
-
-    const summaryUl = renderSummary(this.state);
+    const summaryUl = renderSummary({
+      ...this.state,
+      onAddToppingClick: this.onAddToppingClick,
+      onMinusToppingClick: this.onMinusToppingClick,
+    });
     const hr = document.createElement('hr');
 
     const totalContainer = renderTotal(this.state);
@@ -95,11 +155,5 @@ export default class App {
 
     rootElement.append(confirmationModalContainer,detailsContainer,pizzaContainer,toppingsContainer,summaryContainer,buttonContainer);
 
-    renderForm(this.state);
-    renderSizes(this.state);
-    renderToppings(this.state);
-    renderSummary(this.state);
-    renderConfirmationModal(this.state);
-    renderTotal(this.state);
   };
 }

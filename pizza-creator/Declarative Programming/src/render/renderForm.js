@@ -1,5 +1,3 @@
-import render from '../render';
-
 export default function renderForm(state){
     const rootElement = document.createElement('div');
     rootElement.classList.add('details');
@@ -19,7 +17,7 @@ export default function renderForm(state){
         if (value){input.value=value};
         
         input.onchange = function() {
-            onFormChange(column, input, state);
+            onFormChange(column, input, info);
         }
 
         div.append(label,input);
@@ -28,10 +26,8 @@ export default function renderForm(state){
     return rootElement;
 }
 
-function onFormChange(column, input, state){
+function onFormChange(column, input, info){
     
-    const { info } = state;
-
     const newInfo = info.map(singleInfo => {
         const {column: newColumn} = singleInfo;
 
@@ -56,6 +52,4 @@ function onFormChange(column, input, state){
     if (column !=='confirm email'){
         state.customer[column] = input.value;
     }
-
-    render(state);
 }

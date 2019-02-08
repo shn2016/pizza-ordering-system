@@ -1,5 +1,5 @@
 import App from '../src/app';
-
+import './styles/app.css'
 function main() {
  
   new App();

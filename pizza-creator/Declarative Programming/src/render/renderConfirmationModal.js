@@ -1,6 +1,5 @@
 import clearNode from "../helper/clearNode";
 import getTotal from "../helper/getTotal";
-import render from '../render';
 
 export default function renderConfirmationModal(state) {
     const { isDisplayConfirmationModal, selectedSize,selectedToppings, customer } = state;
@@ -84,7 +83,6 @@ export default function renderConfirmationModal(state) {
     cancelButton.innerText = 'Cancel';
     cancelButton.onclick = () => {
       state.isDisplayConfirmationModal = false;
-      render(state);
     };
 
     const confirmButton = document.createElement('button');

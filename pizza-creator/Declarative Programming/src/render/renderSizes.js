@@ -1,4 +1,4 @@
-import render from '../render';
+import pizza from '../images/pizza.svg';
 
 export default function renderSizes(state) {
     const { pizzaSizes } = state;
@@ -17,7 +17,6 @@ export default function renderSizes(state) {
 
       imageContainer.onclick = function() {
         state.selectedSize = pizzaSize;
-        render(state);
       };
 
       imageContainer.classList.add('img');
@@ -25,7 +24,7 @@ export default function renderSizes(state) {
 
       const pizzaImg = document.createElement('img');
       pizzaImg.alt = name;
-      pizzaImg.src = './pizza.svg';
+      pizzaImg.src = pizza;
       pizzaImg.classList.add('pizzaImg');
       const nameSpan = document.createElement('span');
       nameSpan.innerText = `${name}  (${size}')`;

@@ -22,4 +22,4 @@ export default [{
   }, {
     name: 'onion',
     price: '0.69',
-  }];
+  }]; 
