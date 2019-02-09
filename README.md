@@ -6,13 +6,17 @@ Pizza Ordering is a frontend practing project.
 ## Introduction
 
 There are two parts:
-* Landing page for demonstration.
-* Pizza creator implemented by Declarative Programming(React like), Imperative Programming and React.
+* `Landing page` for demonstration.
+* `Pizza creator` implemented by 3 ways:
+  * Imperative Programming 
+  * Declarative Programming(React like)
+  * React
 
 ## Technology
 
 * HTML, CSS, JavaScript ES6
-* Webpack, React
+* Webpack
+* React
 
 ## How to Run
 
@@ -36,7 +40,7 @@ npm run start
 
 Give credits to [toddmotto](https://github.com/toddmotto) for his [live demo](https://toddmotto.com/angular-pizza-creator/) of pizza creator.
 
-And Biggest thanks to Long for guiding me throughout the project process.
+And Biggest thanks to `Long` for guiding me throughout the project process.
 
 ## About Me
 
