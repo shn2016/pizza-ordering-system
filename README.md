@@ -14,6 +14,24 @@ There are two parts:
 * HTML, CSS, JavaScript ES6
 * Webpack, React
 
+## How to Run
+
+* Git Clone
+```
+git clone git@github.com:shn2016/pizza-ordering-system.git
+```
+
+* For `Pizza Creator` there are several tools to install:
+
+```
+npm init
+npm install webpack webpack-dev-server webpack-cli style-loader html-webpack-plugin css-loader file-loader
+npm run build
+npm run start
+```
+
+
+
 ## Credits
 
 Give credits to [toddmotto](https://github.com/toddmotto) for his [live demo](https://toddmotto.com/angular-pizza-creator/) of pizza creator.
