@@ -125,6 +125,19 @@ body {
     border-radius: 5px;
     cursor: pointer;
   }
+
+  button[type="reset"] {
+    margin-top: 15px;
+    width: 100%;
+    background: #98C550;
+    border: none;
+    padding: 10px 15px;
+    text-align: center;
+    font-size: 1.5rem;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+  }
   
   button.amount {
     width: 2rem;

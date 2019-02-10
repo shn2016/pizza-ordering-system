@@ -1,5 +1,5 @@
 
-export default function renderSummary({
+export default function Summary({
   selectedToppings, 
   selectedSize,
   onAddToppingClick,

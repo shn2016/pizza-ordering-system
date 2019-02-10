@@ -1,6 +1,6 @@
 import getTotal from "../helper/getTotal";
 
-export default function renderTotal({ selectedToppings, selectedSize }){
+export default function Total({ selectedToppings, selectedSize }){
 
   const rootElement = document.createElement('div');
   rootElement.classList.add('total');

@@ -1,12 +1,11 @@
 import clearNode from "../helper/clearNode";
 import getTotal from "../helper/getTotal";
 
-export default function renderConfirmationModal({ 
+export default function ConfirmationModal({ 
   isDisplayConfirmationModal, 
   selectedSize,
   selectedToppings, 
   customer, 
-  info,
   validatingInputRequirement,
   onCancelButtonClick 
 }) {
@@ -16,7 +15,7 @@ export default function renderConfirmationModal({
     if (!isDisplayConfirmationModal) {
       return rootElement;
     }
-    if(validatingInputRequirement(selectedSize, info)){
+    if(validatingInputRequirement()){
       return rootElement;
     };
 

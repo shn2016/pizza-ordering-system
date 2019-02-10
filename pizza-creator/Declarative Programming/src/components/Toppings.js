@@ -1,4 +1,4 @@
-export default function renderToppings({
+export default function Toppings({
   toppings, 
   selectedToppings, 
   onToppingClick 

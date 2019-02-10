@@ -1,18 +1,20 @@
-import clearNode from "./helper/clearNode";
-import renderForm from './render/renderForm';
-import renderSizes from './render/renderSizes';
-import renderToppings from './render/renderToppings';
-import renderSummary from './render/renderSummary';
-import renderConfirmationModal from './render/renderConfirmationModal';
-import renderTotal from './render/renderTotal';
-import info from './data/info';
-import toppings from './data/toppings';
-import pizzaSizes from './data/sizes';
-import customer from './data/customer';
-import renderButton from "./render/renderButton";
+import Form from './Form';
+import Sizes from './Sizes';
+import Toppings from './Toppings';
+import Summary from './Summary';
+import ConfirmationModal from './ConfirmationModal';
+import Total from './Total';
+import Button from "./Button";
+import info from '../data/info';
+import toppings from '../data/toppings';
+import pizzaSizes from '../data/sizes';
+import customer from '../data/customer';
+import BaseComponent from "../base/component";
 
-export default class App { 
+export default class PizzaCreator extends BaseComponent  { 
+
   constructor(){
+      super();
 
       this.state = {
       info,
@@ -45,14 +47,15 @@ export default class App {
     const newSelectedToppings = !isExists 
       ? [{ ...topping, amount: 1 }, ...selectedToppings] 
       : selectedToppings.filter(({ name }) => name !== topping.name);
-
-      this.state.selectedToppings = newSelectedToppings;
     
-    if( selectedSize === null ){
-      this.state.selectedSize = pizzaSizes[2];
-    }
+    const newSelectedSize = selectedSize
+    ? selectedSize
+    : pizzaSizes[2];
 
-     this.render(this.state);
+    this.setState({
+      selectedToppings : newSelectedToppings,
+      selectedSize: newSelectedSize,
+    });
   };
 
   onMinusToppingClick(topping) {
@@ -78,11 +81,12 @@ export default class App {
       return selectedTopping;
     });
 
-    this.state.selectedToppings = newSelectedToppings.filter(newSelectedTopping => !!newSelectedTopping);
-    this.render(this.state);
+    this.setState({
+      selectedToppings: newSelectedToppings.filter(newSelectedTopping => !!newSelectedTopping),
+    })
   }
 
-   onAddToppingClick(topping) {
+  onAddToppingClick(topping) {
     const { selectedToppings } = this.state;
 
     const newSelectedToppings = selectedToppings.map(selectedTopping => {
@@ -99,48 +103,54 @@ export default class App {
       return selectedTopping;
     });
 
-    this.state.selectedToppings = newSelectedToppings;
-    this.render(this.state);
+    this.setState({
+      selectedToppings : newSelectedToppings,
+    })
   }
 
-   onFormChange(column, input){
-    const { info } = this.state;
+  onFormChange(column, input){
+    const { customer, info } = this.state;
     const newInfo = info.map(singleInfo => {
-        const {column: newColumn} = singleInfo;
+      const {column: newColumn} = singleInfo;
 
-        if( newColumn === column && column === 'confirm email' 
-        && this.state.customer['email'] !==input.value){
-            alert('Please fill the previous box first or make sure they are matched');
-            return {
-                column,
-                value: null,
-            };
-        }
-        if (newColumn === column){
-            const newValue = input.value;
-            return {
-                column, 
-                value: newValue,
-            }
-        }        
-        return singleInfo;
+      if( newColumn === column && column === 'confirm email' 
+      && this.state.customer['email'] !==input.value){
+          alert('Please fill the previous box first or make sure they are matched');
+          return {
+              column,
+              value: null,
+          };
+      }
+      if (newColumn === column){
+          const newValue = input.value;
+          return {
+              column, 
+              value: newValue,
+          }
+      }        
+      return singleInfo;
     })
-    this.state.info = newInfo;
 
-    if (column !=='confirm email'){
-      this.state.customer[column] = input.value;
-    }
-}
+    const newCustomer = (column !=='confirm email')
+    ?  Object.assign({...customer, [column]: input.value})
+    : customer;
+
+    this.setState({
+      info : newInfo,
+      customer :newCustomer,
+    });
+  }
   
   onPizzaSizeSelected(pizzaSize){
-    this.state.selectedSize = pizzaSize;
-    this.render(this.state);
+    this.setState({
+      selectedSize: pizzaSize
+    })
   }
 
-  validatingInputRequirement(selectedSize, info){
+  validatingInputRequirement(){
     let isAlert = false;
     let message = 'Warning: Please fill up the follow input box: ';
-
+    const { selectedSize, info } = this.state;
     info.forEach( ({column, value}) => {
       if(value === null){
         message += `\n ${column} `;
@@ -163,87 +173,100 @@ export default class App {
   };
 
   onCancelButtonClick(){
-    this.state.isDisplayConfirmationModal = false;
-    this.render(this.state);
+    this.setState({
+      isDisplayConfirmationModal: false,
+    });
   };
 
   onResetButtonClick(){
-    this.state.selectedToppings = [];
-      // state.customer = { name: '', email :'', address:'', postcode:'',mobile:'' };
-      Object.keys(this.state.customer).forEach( thing => {
-        this.state.customer[thing]=null;
-      });
 
-      const newInfo = info.map(element =>{
-        const {column} = element;
-        return {column, value:null};
-      })
-      this.state.info = newInfo;
-      this.state.selectedSize = null;
-      this.render(this.state);
+    const newInfo = info.map(element =>{
+      const {column} = element;
+      return {column, value:null};
+    })
+    
+    this.setState({
+      selectedToppings: [],
+      customer: { name: '', email :'', address:'', postcode:'',mobile:'' },
+      info: newInfo,
+      selectedSize: null,
+    })
+
   }
 
   onPlaceButtonClick(){
-    this.state.isDisplayConfirmationModal = true;
-    this.render(this.state);
+    this.setState({
+      isDisplayConfirmationModal: true,
+    })
   }
 
   render(){
-    const rootElement = document.querySelector('#app');
-    clearNode(rootElement);
+    const rootElement = document.createElement('div');
 
-    const confirmationModalContainer = renderConfirmationModal({
+    // Confirmation Modal
+    const confirmationModalContainer = ConfirmationModal({
       ...this.state, 
       validatingInputRequirement: this.validatingInputRequirement,
       onCancelButtonClick: this.onCancelButtonClick,
     });
     
+    // Details Form
     const detailsContainer = document.createElement('div');
     detailsContainer.classList.add('section');
     const detailsH2 = document.createElement('h2');
     detailsH2.innerHTML = 'Enter Your Details';
-    const detailsRoot = renderForm({...this.state, onFormChange : this.onFormChange});
+    const detailsRoot = Form({
+      ...this.state, 
+      onFormChange : this.onFormChange
+    });
     detailsContainer.append(detailsH2,detailsRoot);
 
+    // Pizza Size
     const pizzaContainer = document.createElement('div');
     pizzaContainer.classList.add('section');
     const pizzaH2 = document.createElement('h2');
     pizzaH2.innerHTML = 'Pick Your Pizza';
-    const pizzaRoot = renderSizes({...this.state, onPizzaSizeSelected: this.onPizzaSizeSelected});
+    const pizzaRoot = Sizes({
+      ...this.state, 
+      onPizzaSizeSelected: this.onPizzaSizeSelected});
     pizzaContainer.append(pizzaH2,pizzaRoot);
 
+    // Pizza Toppings
     const toppingsContainer = document.createElement('div');
     toppingsContainer.classList.add('section');
     const toppingH2 = document.createElement('h2');
     toppingH2.innerHTML = 'Pick Your Toppings';
-    const result = renderToppings({
+    const result = Toppings({
       ...this.state,
       onToppingClick: this.onToppingClick,
     });
-
     toppingsContainer.append(toppingH2,result);
 
+    // Summary
     const summaryContainer = document.createElement('div');    
     summaryContainer.classList.add('section');
     const summaryH2 = document.createElement('h2');
     summaryH2.innerHTML = 'Pick Your Toppings'
-    const summaryUl = renderSummary({
+    const summaryUl = Summary({
       ...this.state,
       onAddToppingClick: this.onAddToppingClick,
       onMinusToppingClick: this.onMinusToppingClick,
     });
     const hr = document.createElement('hr');
 
-    const totalContainer = renderTotal(this.state);
-    summaryContainer.append(summaryH2,summaryUl,hr,totalContainer);
+    const totalContainer = Total(this.state);
+    summaryContainer.append(summaryH2, summaryUl, hr, totalContainer);
 
-    const buttonContainer = renderButton({
+    // Buttons
+    const buttonContainer = Button({
       onPlaceButtonClick: this.onPlaceButtonClick,
       onResetButtonClick: this.onResetButtonClick,
     });
 
-
-    rootElement.append(confirmationModalContainer,detailsContainer,pizzaContainer,toppingsContainer,summaryContainer,buttonContainer);
-
+    rootElement.append(confirmationModalContainer, detailsContainer
+      , pizzaContainer, toppingsContainer
+      , summaryContainer, buttonContainer);
+    
+    return rootElement;
   };
 }

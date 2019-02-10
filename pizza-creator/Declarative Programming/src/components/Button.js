@@ -1,4 +1,4 @@
-export default function renderButton({onPlaceButtonClick, onResetButtonClick}){
+export default function Button({onPlaceButtonClick, onResetButtonClick}){
     const rootElement = document.createElement('div');
     rootElement.classList.add('section');
 

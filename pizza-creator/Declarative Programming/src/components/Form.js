@@ -1,4 +1,4 @@
-export default function renderForm({info, onFormChange}){
+export default function Form({info, onFormChange}){
     const rootElement = document.createElement('div');
     rootElement.classList.add('details');
 
