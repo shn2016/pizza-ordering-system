@@ -1,3 +1,5 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
 import Form from './Form';
 import Sizes from './Sizes';
 import Toppings from './Toppings';
@@ -39,6 +41,7 @@ export default class PizzaCreator extends BaseComponent  {
     this.render();
   }; 
 
+  //#region
   onToppingClick(topping) {
 
     const { selectedToppings, selectedSize, pizzaSizes } = this.state;
@@ -108,13 +111,13 @@ export default class PizzaCreator extends BaseComponent  {
     })
   }
 
-  onFormChange(column, input){
+  onFormChange(column, value){
     const { customer, info } = this.state;
     const newInfo = info.map(singleInfo => {
       const {column: newColumn} = singleInfo;
 
       if( newColumn === column && column === 'confirm email' 
-      && this.state.customer['email'] !==input.value){
+      && this.state.customer['email'] !==value){
           alert('Please fill the previous box first or make sure they are matched');
           return {
               column,
@@ -122,7 +125,7 @@ export default class PizzaCreator extends BaseComponent  {
           };
       }
       if (newColumn === column){
-          const newValue = input.value;
+          const newValue = value;
           return {
               column, 
               value: newValue,
@@ -132,7 +135,7 @@ export default class PizzaCreator extends BaseComponent  {
     })
 
     const newCustomer = (column !=='confirm email')
-    ?  Object.assign({...customer, [column]: input.value})
+    ?  Object.assign({...customer, [column]: value})
     : customer;
 
     this.setState({
@@ -199,6 +202,7 @@ export default class PizzaCreator extends BaseComponent  {
       isDisplayConfirmationModal: true,
     })
   }
+  //#endregion
 
   render(){
     const rootElement = document.createElement('div');
@@ -213,55 +217,73 @@ export default class PizzaCreator extends BaseComponent  {
     // Details Form
     const detailsContainer = document.createElement('div');
     detailsContainer.classList.add('section');
-    const detailsH2 = document.createElement('h2');
-    detailsH2.innerHTML = 'Enter Your Details';
-    const detailsRoot = Form({
-      ...this.state, 
-      onFormChange : this.onFormChange
-    });
-    detailsContainer.append(detailsH2,detailsRoot);
+
+    ReactDOM.render([
+      React.createElement('h2', {key:'h2'}, 'Enter Your Details'),
+      React.createElement(Form,{
+        ...this.state,
+        onFormChange: this.onFormChange,
+        key:'form',
+      })], detailsContainer
+      );
 
     // Pizza Size
     const pizzaContainer = document.createElement('div');
     pizzaContainer.classList.add('section');
-    const pizzaH2 = document.createElement('h2');
-    pizzaH2.innerHTML = 'Pick Your Pizza';
-    const pizzaRoot = Sizes({
-      ...this.state, 
-      onPizzaSizeSelected: this.onPizzaSizeSelected});
-    pizzaContainer.append(pizzaH2,pizzaRoot);
+
+    ReactDOM.render([
+      React.createElement('h2', {key:'h2'}, 'Pick Your Pizza'),
+      React.createElement(Sizes,{
+        ...this.state,
+        onPizzaSizeSelected: this.onPizzaSizeSelected,
+        key:'pizzaSizes',
+      })
+    ], pizzaContainer)
+   
 
     // Pizza Toppings
     const toppingsContainer = document.createElement('div');
     toppingsContainer.classList.add('section');
-    const toppingH2 = document.createElement('h2');
-    toppingH2.innerHTML = 'Pick Your Toppings';
-    const result = Toppings({
-      ...this.state,
-      onToppingClick: this.onToppingClick,
-    });
-    toppingsContainer.append(toppingH2,result);
+    
+    ReactDOM.render([
+      React.createElement('h2', {key:'h2'}, 'Pick Your Toppings'),
+      React.createElement(Toppings, {
+        ...this.state,
+        onToppingClick: this.onToppingClick, 
+        key:'toppings'
+      })],
+      toppingsContainer,
+    );
 
     // Summary
     const summaryContainer = document.createElement('div');    
     summaryContainer.classList.add('section');
-    const summaryH2 = document.createElement('h2');
-    summaryH2.innerHTML = 'Pick Your Toppings'
-    const summaryUl = Summary({
-      ...this.state,
-      onAddToppingClick: this.onAddToppingClick,
-      onMinusToppingClick: this.onMinusToppingClick,
-    });
-    const hr = document.createElement('hr');
 
-    const totalContainer = Total(this.state);
-    summaryContainer.append(summaryH2, summaryUl, hr, totalContainer);
+    ReactDOM.render([
+      React.createElement('h2', {key:'h2'}, 'Summary'),
+      React.createElement(Summary, {
+        ...this.state,
+        onAddToppingClick: this.onAddToppingClick,
+        onMinusToppingClick: this.onMinusToppingClick,
+        key:'summary'
+      }),
+      React.createElement('hr', {key:'hr'}),
+      React.createElement(Total, {...this.state, key:'total'}),
+    ],
+      summaryContainer,
+    );
+
 
     // Buttons
-    const buttonContainer = Button({
-      onPlaceButtonClick: this.onPlaceButtonClick,
-      onResetButtonClick: this.onResetButtonClick,
-    });
+    const buttonContainer = document.createElement('div');
+    buttonContainer.classList.add('section');
+
+    ReactDOM.render(
+      React.createElement(Button,{
+        onPlaceButtonClick: this.onPlaceButtonClick,
+        onResetButtonClick: this.onResetButtonClick,
+      }),buttonContainer
+    );
 
     rootElement.append(confirmationModalContainer, detailsContainer
       , pizzaContainer, toppingsContainer

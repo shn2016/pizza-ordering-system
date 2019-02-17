@@ -1,27 +1,32 @@
+import React from 'react';
+
 export default function Form({info, onFormChange}){
-    const rootElement = document.createElement('div');
-    rootElement.classList.add('details');
+    
+  const infoDivs = info.map( ({column, value: infoValue}) => { 
+    const label = React.createElement('label',{
+        key: 'label',
+    }, column);
 
-    info.forEach( ({column, value}) => { 
-        const div = document.createElement('div');
-        div.classList.add('form-control');
-
-        const label = document.createElement('label');
-        label.innerText = column;
-
-        const input = document.createElement('input');
-        input.id = column;
-        input.type='text'
-        input.name = column;
-        if (value){input.value=value};
-        
-        input.onchange = function() {
-            onFormChange(column, input);
-        }
-
-        div.append(label,input);
-        rootElement.append(div);
+    const input = React.createElement('input',{
+        type: 'text',
+        key: 'input',
+        name: column,
+        value:'',
+        //onChange: () => onFormChange(column, value)
     });
-    return rootElement;
+    if(!!infoValue){input.value=infoValue};
+
+    const infoDiv = React.createElement('div',{
+        className:'form-control',
+        key: column,
+      }, [label, input]);
+    return infoDiv;
+  });
+
+  const rootElement = React.createElement('div',{
+    className:'details'
+  }, infoDivs );
+
+  return rootElement;
 }
 

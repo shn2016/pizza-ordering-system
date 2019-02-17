@@ -1,3 +1,4 @@
+import React from 'react';
 
 export default function Summary({
   selectedToppings, 
@@ -5,56 +6,56 @@ export default function Summary({
   onAddToppingClick,
   onMinusToppingClick,
 }) {
-    const rootElement = document.createElement('ul');
-    rootElement.classList.add('summary');
+    const selectSizeLi = (selectedSize !== null)? 
+    React.createElement('li',{key:'selectedSize'},[
+      React.createElement('span',{key:'size'},`${selectedSize.name} Pizza`),
+      React.createElement('span',{key:'1'}),
+      React.createElement('span',{key:'2'}),
+      React.createElement('span',{key:'3'}),
+      React.createElement('span',{key:'price'},`$${selectedSize.price}`),
+    ])
+    : null;
 
-    if(selectedSize !== null){
-      const { name, price} =  selectedSize;
-      const li = document.createElement('li');
-      const piizaSpan = document.createElement('span');
-      piizaSpan.innerHTML = `${name} Pizza`;
-      const simpleSpan1 = document.createElement('span');
-      const simpleSpan2 = document.createElement("span");
-      const simpleSpan3 = document.createElement("span");
-      const priceSpan = document.createElement("span");
-      priceSpan.innerHTML = `$${price}`;
-      li.append (simpleSpan1, simpleSpan2, piizaSpan, simpleSpan3, priceSpan);
-      rootElement.append(li);
-    }
-
-    selectedToppings.forEach(selectedTopping => {
+    const selectedToppingLis = selectedToppings.map(selectedTopping => {
       const { name, amount, price } = selectedTopping;
 
-      const li = document.createElement('li');
+      const addButton = React.createElement('button',{
+        className: 'amount',
+        onClick: () => onAddToppingClick(selectedTopping),
+        key: 'addButton',
+      }, '+');
 
-      const addButton = document.createElement('button');
-      addButton.classList.add('amount');
-      addButton.innerText = '+';
-      addButton.onclick = () => {
-        onAddToppingClick(selectedTopping);
-      }
+      const minusButton = React.createElement('button',{
+        className:'amount',
+        onClick: () => onMinusToppingClick(selectedTopping),
+        key: 'minusButton',
+      }, '-');
+      
+      const nameSpan = React.createElement('span',{
+        key: 'nameSpan'
+      },name);
 
-      const minusButton = document.createElement('button');
-      minusButton.classList.add('amount');
-      minusButton.innerText = '-';
-      minusButton.onclick = () => {
-        onMinusToppingClick(selectedTopping);
-      }
-
-      const nameSpan = document.createElement('span');
-      nameSpan.innerText = name;
-
-      const amountSpan = document.createElement('span');
-      amountSpan.innerText = `* ${amount}`;
-
-      const priceSpan = document.createElement('span');
+      const amountSpan = React.createElement('span',{
+        key: 'amountSpan'
+      },`* ${amount}`);
+     
       let amountPrice = parseFloat(price) * parseFloat(amount);
       amountPrice = amountPrice.toFixed(2);
-      priceSpan.innerText = `$ ${amountPrice}`;
 
-      li.append(addButton, minusButton, nameSpan, amountSpan, priceSpan);
-      rootElement.append(li);
+      const priceSpan = React.createElement('span',{
+        key:'priceSpan'
+      },`* ${amountPrice}`);
+    
+      const li = React.createElement('li',{
+        key:name,
+      },[addButton, minusButton,  nameSpan,  amountSpan, priceSpan
+      ]);
+      return li;
     });
+
+    const rootElement = React.createElement('ul',{
+      className: 'summary',
+    },[ selectSizeLi, selectedToppingLis]);
 
     return rootElement;
   }

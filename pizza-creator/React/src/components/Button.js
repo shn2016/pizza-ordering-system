@@ -1,20 +1,20 @@
+import React from 'react';
+
 export default function Button({onPlaceButtonClick, onResetButtonClick}){
-    const rootElement = document.createElement('div');
-    rootElement.classList.add('section');
+    
+    const placeButton = React.createElement('button',{
+        type:'submit',
+        onClick: () =>  onPlaceButtonClick(),
+        key:'placeButton',
+    },'Place Order');
+    
+    const resetButton = React.createElement('button',{
+        type:'reset',
+        onClick: () =>  onResetButtonClick(),
+        key:'resetButton',
+    },'Clear');
 
-    const placeButton =document.createElement('button');
-    placeButton.type='submit';
-    placeButton.innerHTML='Place Order';
-    placeButton.onclick = () => {
-        onPlaceButtonClick();
-    }
-    const resetButton =document.createElement('button');
-    resetButton.type='reset';
-    resetButton.innerHTML='Clear';
-    resetButton.onclick = () => {
-        onResetButtonClick();
-    }
+    const rootElement = React.createElement('div', null, [placeButton, resetButton])
 
-    rootElement.append(placeButton,resetButton);
     return rootElement;
   }

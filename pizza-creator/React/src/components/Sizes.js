@@ -1,40 +1,39 @@
+import React from 'react';
 import pizza from '../images/pizza.svg';
 
-export default function renderSizes({ 
+export default function Sizes({ 
   pizzaSizes, 
   selectedSize, 
   onPizzaSizeSelected
 }) {
-   
-    const rootElement = document.createElement('div');
-    rootElement.classList.add('pizza-size');
 
-    pizzaSizes.forEach(pizzaSize => {
+    const imageContainers = pizzaSizes.map(pizzaSize => {
       const { name, size } = pizzaSize;
-      const imageContainer = document.createElement('div');
 
-      if (selectedSize && name === selectedSize.name) {
-        imageContainer.classList.add('active');
-      };
-
-      imageContainer.onclick = function() {
-        onPizzaSizeSelected(pizzaSize);
-      };
-
-      imageContainer.classList.add('img');
-      imageContainer.classList.add(name);
-
-      const pizzaImg = document.createElement('img');
-      pizzaImg.alt = name;
-      pizzaImg.src = pizza;
-      pizzaImg.classList.add('pizzaImg');
-      const nameSpan = document.createElement('span');
-      nameSpan.innerText = `${name}  (${size}')`;
+      const pizzaImg = React.createElement('img',{
+        alt: name,
+        src: pizza,
+        className:'pizzaImg',
+        key:'pizzeImg',
+      });
+     
+      const nameSpan = React.createElement('span',{
+        key:'nameSpan'
+      },`${name}  (${size}')`
+      );
       
-      imageContainer.append(pizzaImg, nameSpan);
+      const imageContainer = React.createElement('div',{
+        className:`img ${name} ${(selectedSize && name === selectedSize.name)? 'active' : null}`,
+        onClick: () => onPizzaSizeSelected(pizzaSize),
+        key: name,
+      },[pizzaImg, nameSpan]);
 
-      rootElement.append(imageContainer);
-    }
-    )
+      return imageContainer;
+    });
+
+    const rootElement = React.createElement('div',{
+      className:'pizza-size',
+    }, imageContainers);
+
     return rootElement;
   }
