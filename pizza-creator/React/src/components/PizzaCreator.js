@@ -112,36 +112,8 @@ export default class PizzaCreator extends BaseComponent  {
   }
 
   onFormChange(column, value){
-    const { customer, info } = this.state;
-    const newInfo = info.map(singleInfo => {
-      const {column: newColumn} = singleInfo;
+    
 
-      if( newColumn === column && column === 'confirm email' 
-      && this.state.customer['email'] !==value){
-          alert('Please fill the previous box first or make sure they are matched');
-          return {
-              column,
-              value: null,
-          };
-      }
-      if (newColumn === column){
-          const newValue = value;
-          return {
-              column, 
-              value: newValue,
-          }
-      }        
-      return singleInfo;
-    })
-
-    const newCustomer = (column !=='confirm email')
-    ?  Object.assign({...customer, [column]: value})
-    : customer;
-
-    this.setState({
-      info : newInfo,
-      customer :newCustomer,
-    });
   }
   
   onPizzaSizeSelected(pizzaSize){

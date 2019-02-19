@@ -11,10 +11,9 @@ export default function Form({info, onFormChange}){
         type: 'text',
         key: 'input',
         name: column,
-        value:'',
-        //onChange: () => onFormChange(column, value)
+        onChange: () => onFormChange(column, event.target.value),
     });
-    if(!!infoValue){input.value=infoValue};
+    //if(!!infoValue){input.value=infoValue};
 
     const infoDiv = React.createElement('div',{
         className:'form-control',
