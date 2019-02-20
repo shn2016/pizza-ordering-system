@@ -1,5 +1,7 @@
 import React from 'react';
-export default function Button({onPlaceButtonClick, onResetButtonClick}){
+export default Button;
+
+const Button = ({onPlaceButtonClick, onResetButtonClick}) => {
   return(
     <div className = "section">
       <button type="submit" onClick = {() => onPlaceButtonClick()} key="placeButton">

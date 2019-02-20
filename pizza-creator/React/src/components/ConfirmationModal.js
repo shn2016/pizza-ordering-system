@@ -1,13 +1,16 @@
 import getTotal from "../helper/getTotal";
 
-export default function ConfirmationModal({ 
+export default ConfirmationModal;
+
+const ConfirmationModal =
+({ 
   isDisplayConfirmationModal, 
   selectedSize,
   selectedToppings, 
   customer, 
   validatingInputRequirement,
   onCancelButtonClick 
-}) {
+}) => {
   return( (isDisplayConfirmationModal) && (!validatingInputRequirement)(
     <div className="confirmation-modal modal modal-box">
       <h1>Your Order Details</h1>

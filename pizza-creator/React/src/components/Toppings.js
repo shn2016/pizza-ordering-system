@@ -1,10 +1,12 @@
 import React from 'react';
 
-export default function Toppings({
+export default Toppings;
+
+Toppings =({
   toppings, 
   selectedToppings, 
   onToppingClick 
-  }) {    
+  }) => {    
   return (
     <div className="toppings">
       {toppings.map(topping =>{

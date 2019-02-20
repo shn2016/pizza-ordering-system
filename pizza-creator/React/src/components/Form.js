@@ -1,6 +1,8 @@
 import React from 'react';
 
-export default function Form({info, onFormChange}){
+export default Form;
+
+const Form = ({info, onFormChange}) => {
   return (
     <div className='details' >
       {info.map(({column, value: infoValue}) =>{

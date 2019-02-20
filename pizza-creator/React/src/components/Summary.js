@@ -1,11 +1,13 @@
 import React from 'react';
 
-export default function Summary({
+export default Summary;
+
+Summary = ({
   selectedToppings, 
   selectedSize,
   onAddToppingClick,
   onMinusToppingClick,
-}) {
+}) => {
   return(
     <ul className="summary">
       {selectedSize &&

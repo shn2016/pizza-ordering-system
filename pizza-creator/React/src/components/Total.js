@@ -1,7 +1,8 @@
 import React from 'react';
 import getTotal from "../helper/getTotal";
 
-export default function Total({ selectedToppings, selectedSize }){
+export default Total;
+Total = ({ selectedToppings, selectedSize }) => {
   let totalPrice = 0;
   totalPrice = getTotal({ selectedToppings, selectedSize });
   return (

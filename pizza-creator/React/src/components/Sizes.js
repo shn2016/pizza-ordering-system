@@ -1,11 +1,13 @@
 import React from 'react';
 import pizza from '../images/pizza.svg';
 
-export default function Sizes({ 
+export default Sizes;
+
+const Sizes = ({ 
   pizzaSizes, 
   selectedSize, 
   onPizzaSizeSelected
-}) {
+}) => {
   return(
     <div className='pizza-size'>
       {pizzaSizes.map(pizzaSize =>{
