@@ -13,10 +13,10 @@ import pizzaSizes from '../data/sizes';
 import customer from '../data/customer';
 import BaseComponent from "../base/component";
 
-export default class PizzaCreator extends BaseComponent  { 
+export default class PizzaCreator extends React.Component  { 
 
-  constructor(){
-      super();
+  constructor(props){
+      super(props);
 
       this.state = {
       info,
@@ -177,90 +177,59 @@ export default class PizzaCreator extends BaseComponent  {
   //#endregion
 
   render(){
-    const rootElement = document.createElement('div');
-
-    // Confirmation Modal
-    const confirmationModalContainer = ConfirmationModal({
-      ...this.state, 
-      validatingInputRequirement: this.validatingInputRequirement,
-      onCancelButtonClick: this.onCancelButtonClick,
-    });
-    
-    // Details Form
-    const detailsContainer = document.createElement('div');
-    detailsContainer.classList.add('section');
-
-    ReactDOM.render([
-      React.createElement('h2', {key:'h2'}, 'Enter Your Details'),
-      React.createElement(Form,{
-        ...this.state,
-        onFormChange: this.onFormChange,
-        key:'form',
-      })], detailsContainer
-      );
-
-    // Pizza Size
-    const pizzaContainer = document.createElement('div');
-    pizzaContainer.classList.add('section');
-
-    ReactDOM.render([
-      React.createElement('h2', {key:'h2'}, 'Pick Your Pizza'),
-      React.createElement(Sizes,{
-        ...this.state,
-        onPizzaSizeSelected: this.onPizzaSizeSelected,
-        key:'pizzaSizes',
-      })
-    ], pizzaContainer)
-   
-
-    // Pizza Toppings
-    const toppingsContainer = document.createElement('div');
-    toppingsContainer.classList.add('section');
-    
-    ReactDOM.render([
-      React.createElement('h2', {key:'h2'}, 'Pick Your Toppings'),
-      React.createElement(Toppings, {
-        ...this.state,
-        onToppingClick: this.onToppingClick, 
-        key:'toppings'
-      })],
-      toppingsContainer,
-    );
-
-    // Summary
-    const summaryContainer = document.createElement('div');    
-    summaryContainer.classList.add('section');
-
-    ReactDOM.render([
-      React.createElement('h2', {key:'h2'}, 'Summary'),
-      React.createElement(Summary, {
-        ...this.state,
-        onAddToppingClick: this.onAddToppingClick,
-        onMinusToppingClick: this.onMinusToppingClick,
-        key:'summary'
-      }),
-      React.createElement('hr', {key:'hr'}),
-      React.createElement(Total, {...this.state, key:'total'}),
-    ],
-      summaryContainer,
-    );
-
-
-    // Buttons
-    const buttonContainer = document.createElement('div');
-    buttonContainer.classList.add('section');
-
-    ReactDOM.render(
-      React.createElement(Button,{
-        onPlaceButtonClick: this.onPlaceButtonClick,
-        onResetButtonClick: this.onResetButtonClick,
-      }),buttonContainer
-    );
-
-    rootElement.append(confirmationModalContainer, detailsContainer
-      , pizzaContainer, toppingsContainer
-      , summaryContainer, buttonContainer);
-    
-    return rootElement;
+    return (
+      <React.Fragment>
+        {this.isDisplayConfirmationModal && (<ConfirmationModal
+          isDisplayConfirmationModal ={this.isDisplayConfirmationModal}
+          selectedSize = {this.selectedSize}
+          selectedToppings = {this.selectedToppings}
+          customer = {this.customer}
+          validatingInputRequirement = {this.validatingInputRequirement}
+          onCancelButtonClick  ={this.onCancelButtonClick}
+        />)}
+        <div className = "section">
+          <h1>Enter Your Details</h1>
+          <Form
+            info = {this.info}
+          />
+        </div>
+        <div className = "section">
+          <h1>Pick Your Pizza</h1>
+          <Sizes 
+            pizzaSizes = {this.pizzaSizes}
+            selectedSize = {this.selectedSize}
+            onPizzaSizeSelected = {this.onPizzaSizeSelected}
+          />
+        </div>
+        <div className = "section">
+          <h1>Pick Your Toppings</h1>
+          <Toppings 
+            toppings ={this.toppings}
+            selectedToppings = {this.selectedToppings}
+            onToppingClick  ={this.onToppingClick}
+          />
+        </div>
+        <div className = "section">
+          <h1>Summary</h1>
+          <Summary 
+            selectedToppings = {this.selectedToppings}
+            selectedSize = {this.selectedToppings}
+            onAddToppingClick = {this.onAddToppingClick}
+            onMinusToppingClick = {this.onMinusToppingClick}
+          />
+          <hr/>
+          <Total 
+            selectedToppings = {this.selectedToppings}
+            selectedSize ={this.selectedSize}
+          />
+        </div>
+        <div className = "section">
+          <Button 
+            onPlaceButtonClick = {this.onPlaceButtonClick}
+            onResetButtonClick = {this.onResetButtonClick}
+          />
+        </div>
+      </React.Fragment>
+    )
   };
 }
