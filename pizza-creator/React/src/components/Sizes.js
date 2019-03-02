@@ -1,14 +1,13 @@
 import React from 'react';
 import pizza from '../images/pizza.svg';
 
-export default Sizes;
 
 const Sizes = ({ 
   pizzaSizes, 
   selectedSize, 
   onPizzaSizeSelected
-}) => {
-  return(
+}) => 
+  (
     <div className='pizza-size'>
       {pizzaSizes.map(pizzaSize =>{
         const { name, size } = pizzaSize;
@@ -19,10 +18,11 @@ const Sizes = ({
           key= {name}
           >
             <img alt={name} src={pizza} className='pizzaImg'/>
-            <span>{name}  {size}'</span>
+            <span>{name}  {size}''</span>
           </div>
         )
       })}
     </div>
-  )
-}
+  );
+
+export default Sizes;

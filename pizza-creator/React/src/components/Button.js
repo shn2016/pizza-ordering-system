@@ -1,5 +1,4 @@
 import React from 'react';
-export default Button;
 
 const Button = ({onPlaceButtonClick, onResetButtonClick}) => {
   return(
@@ -13,3 +12,5 @@ const Button = ({onPlaceButtonClick, onResetButtonClick}) => {
     </div>
   );
 }
+
+export default Button;

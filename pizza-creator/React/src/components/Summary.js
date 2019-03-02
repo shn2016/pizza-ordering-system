@@ -1,8 +1,7 @@
 import React from 'react';
 
-export default Summary;
 
-Summary = ({
+const Summary = ({
   selectedToppings, 
   selectedSize,
   onAddToppingClick,
@@ -10,8 +9,8 @@ Summary = ({
 }) => {
   return(
     <ul className="summary">
-      {selectedSize &&
-        (<li key='selectedSize'>
+      {!!selectedSize &&
+        (<li key={selectedSize}>
           <span key={"size"}>{selectedSize.name} Pizza</span>
           <span key={"1"}></span>
           <span key={"2"}></span>
@@ -44,3 +43,5 @@ Summary = ({
     </ul>
   )
 }
+
+export default Summary;

@@ -1,8 +1,7 @@
 import React from 'react';
 import getTotal from "../helper/getTotal";
 
-export default Total;
-Total = ({ selectedToppings, selectedSize }) => {
+const Total = ({ selectedToppings, selectedSize }) => {
   let totalPrice = 0;
   totalPrice = getTotal({ selectedToppings, selectedSize });
   return (
@@ -11,3 +10,5 @@ Total = ({ selectedToppings, selectedSize }) => {
     </div>
   )
 }
+
+export default Total;

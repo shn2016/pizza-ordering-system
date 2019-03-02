@@ -1,8 +1,6 @@
 import React from 'react';
 
-export default Toppings;
-
-Toppings =({
+const Toppings =({
   toppings, 
   selectedToppings, 
   onToppingClick 
@@ -30,7 +28,8 @@ Toppings =({
     </div>
   );
 }
- 
+export default Toppings;
+
   
 
   

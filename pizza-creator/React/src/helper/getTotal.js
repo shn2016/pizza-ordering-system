@@ -4,7 +4,7 @@ export default function getTotal({ selectedToppings, selectedSize }){
     selectedToppings.forEach( ({price, amount}) => { 
         totalPrice += amount * price;
       });
-      if(selectedSize !==null ) {
+      if(selectedSize !==null && selectedSize !== undefined ) {
         totalPrice = parseFloat(totalPrice) + parseFloat(selectedSize.price);
       }
       totalPrice = parseFloat(totalPrice).toFixed(2);
