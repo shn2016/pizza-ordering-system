@@ -1,19 +1,19 @@
 import React from 'react';
 
-const Toppings =({
+const Toppings = ({
   toppings, 
   selectedToppings, 
   onToppingClick 
   }) => {    
   return (
     <div className="toppings">
-      {toppings.map(topping =>{
+      {toppings.map(topping => {
         const { name: toppingName} = topping;
         return (
         <div 
           className = {`topping ${selectedToppings.find(({ name }) => name === topping.name) ? 'active' : null}`}
           key = {toppingName}
-          onClick = {() => onToppingClick(topping)}
+          onClick = { () => onToppingClick(topping)}
         >
           <div className = "img">
             <img

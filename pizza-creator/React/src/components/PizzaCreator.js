@@ -1,13 +1,10 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import Form from './Form';
 import Sizes from './Sizes';
 import Toppings from './Toppings';
 import Summary from './Summary';
 import ConfirmationModal from './ConfirmationModal';
-import Total from './Total';
 import Button from "./Button";
-import info from '../data/info';
 import toppings from '../data/toppings';
 import pizzaSizes from '../data/sizes';
 import customer from '../data/customer';
@@ -18,7 +15,6 @@ export default class PizzaCreator extends React.Component  {
       super(props);
 
       this.state = {
-      info,
       customer,
       pizzaSizes,
       selectedSize:null,
@@ -110,17 +106,18 @@ export default class PizzaCreator extends React.Component  {
   }
 
   onFormChange(column, value){
-    const { info } = this.state;
-    const newInfo = info.map(element => {
-      if(element.column === column){
-        element.value = value;
+    const { customer } = this.state;
+    const newCustomer = {};
+    Object.keys(customer).forEach(element => {
+      if(element === column){
+        newCustomer[element] = value;
+      } else {
+        newCustomer[element] = customer[element]
       }
-      return element;
-    })
-    this.setState({
-      info: newInfo,
     });
-
+    this.setState({
+      customer: newCustomer,
+    });
   }
   
   onPizzaSizeSelected(pizzaSize){
@@ -132,9 +129,10 @@ export default class PizzaCreator extends React.Component  {
   validatingInputRequirement(){
     let isAlert = false;
     let message = 'Warning: Please fill up the follow input box: ';
-    const { selectedSize, info } = this.state;
-    info.forEach( ({column, value}) => {
-      if(value === null){
+    
+    const { selectedSize, customer } = this.state;
+    Object.keys(customer).forEach( column => {
+      if(customer[column] === null){
         message += `\n ${column} `;
         isAlert = true;
       }
@@ -161,31 +159,30 @@ export default class PizzaCreator extends React.Component  {
   };
 
   onResetButtonClick(){
+    const { customer } = this.state;
+    const newCustomer = {};
 
-    const newInfo = info.map(element =>{
-      const {column} = element;
-      return {column, value:null};
-    })
-    
+    Object.keys(customer).forEach(key =>{
+      newCustomer[key] = null;
+    });
+
     this.setState({
       selectedToppings: [],
-      customer: { name: '', email :'', address:'', postcode:'',mobile:'' },
-      info: newInfo,
+      customer: newCustomer,
       selectedSize: null,
     })
-
   }
 
   onPlaceButtonClick(){
     this.setState({
       isDisplayConfirmationModal: true,
-    })
+    });
   }
   //#endregion
 
   render(){
     const { 
-      info,
+      customer,
       pizzaSizes,
       selectedSize,
       toppings,
@@ -195,18 +192,18 @@ export default class PizzaCreator extends React.Component  {
 
     return (
       <React.Fragment>
-        {isDisplayConfirmationModal && !this.validatingInputRequirement
+        {isDisplayConfirmationModal && !this.validatingInputRequirement() &&
         (<ConfirmationModal
           selectedSize = {selectedSize}
           selectedToppings = {selectedToppings}
-          info = {info}
-          onCancelButtonClick  ={this.onCancelButtonClick}
+          customer = {customer}
+          onCancelButtonClick  = {this.onCancelButtonClick}
         />)
         }
         <div className = "section">
           <h1>Enter Your Details</h1>
           <Form
-            info = {info}
+            customer = {customer}
             onFormChange = {this.onFormChange}
           />
         </div>
@@ -221,9 +218,9 @@ export default class PizzaCreator extends React.Component  {
         <div className = "section">
           <h1>Pick Your Toppings</h1>
           <Toppings 
-            toppings ={toppings}
+            toppings = {toppings}
             selectedToppings = {selectedToppings}
-            onToppingClick  ={this.onToppingClick}
+            onToppingClick  = {this.onToppingClick}
           />
         </div>
         <div className = "section">
@@ -235,10 +232,9 @@ export default class PizzaCreator extends React.Component  {
             onMinusToppingClick = {this.onMinusToppingClick}
           />
           <hr/>
-          <Total 
-            selectedToppings = {selectedToppings}
-            selectedSize ={selectedSize}
-          />
+          <div className = 'total'>
+            Total: {getTotal({ selectedToppings, selectedSize })}
+          </div>
         </div>
         <div className = "section">
           <Button 

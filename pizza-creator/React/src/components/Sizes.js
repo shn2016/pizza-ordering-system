@@ -9,13 +9,13 @@ const Sizes = ({
 }) => 
   (
     <div className='pizza-size'>
-      {pizzaSizes.map(pizzaSize =>{
+      {pizzaSizes.map(pizzaSize => {
         const { name, size } = pizzaSize;
-        return(
+        return (
           <div
-          className = {`img ${name} ${(selectedSize && name === selectedSize.name)? 'active' : null}`}
-          onClick= {() => onPizzaSizeSelected(pizzaSize)}
-          key= {name}
+            className = {`img ${name} ${(selectedSize && name === selectedSize.name)? 'active' : null}`}
+            onClick= { () => onPizzaSizeSelected(pizzaSize)}
+            key= {name}
           >
             <img alt={name} src={pizza} className='pizzaImg'/>
             <span>{name}  {size}''</span>

@@ -24,13 +24,13 @@ const Summary = ({
           <li key={name}>
             <button 
               className = "amount" 
-              onClick= {() => onAddToppingClick(selectedTopping)}
+              onClick= { () => onAddToppingClick(selectedTopping)}
             >
               +
             </button>
             <button
-            className = "amount" 
-            onClick= {() => onMinusToppingClick(selectedTopping)}
+              className = "amount" 
+              onClick= { () => onMinusToppingClick(selectedTopping)}
             >
               -
             </button>
