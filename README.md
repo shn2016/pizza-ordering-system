@@ -5,18 +5,21 @@ Pizza Ordering is a frontend practing project.
 
 ## Introduction
 
-There are two parts:
-* `Landing page` for demonstration.
+There are four parts:
+* [`Landing page`](landing-page/) for demonstration.
 * `Pizza creator` implemented by 3 ways:
   * Imperative Programming 
   * Declarative Programming(React like)
-  * React
+  * [React](pizza-creator/React/)
+* [`Pizza admin system`](pizza-admin-system/):
+* [`rest API`](https://github.com/shn2016/kai-pizza-admin-api): to support the backend API
 
 ## Technology
 
 * HTML, CSS, JavaScript ES6
-* Webpack
-* React
+* Webpack, Babel
+* React/ React JSX / React Router
+* Loopback 4 / NodeJS / TypeScript
 
 ## How to Run
 
@@ -25,11 +28,11 @@ There are two parts:
 git clone git@github.com:shn2016/pizza-ordering-system.git
 ```
 
-* For `Pizza Creator` there are several tools to install:
+* Installation
 
 ```
 npm init
-npm install webpack webpack-dev-server webpack-cli style-loader html-webpack-plugin css-loader file-loader
+npm install
 npm run build
 npm run start
 ```
