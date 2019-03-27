@@ -1,0 +1,10 @@
+
+.app {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  height: 100vh;
+}
+
+.app > .content {
+  padding: 2rem 2rem 2rem 4rem;
+}

@@ -1,0 +1,29 @@
+.sidebar {
+  --padding: 1rem;
+  background: #001529;
+  color: white;
+}
+
+.sidebar .brand {
+  background: #002140;
+  display: flex;
+  padding: var(--padding);
+}
+
+.sidebar .brand h1 {
+  font-size: 1.5rem;
+}
+
+.sidebar .menu {
+  display: grid;
+  padding: var(--padding);
+}
+
+.sidebar .menu a {
+  padding: 0.5rem 0;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.sidebar .menu a.active {
+  color: rgba(255, 255, 255, 1);
+}

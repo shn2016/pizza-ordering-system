@@ -1,15 +1,15 @@
 import React from 'react';
 import Sidebar from '../Sidebar';
 import './PizzaCreatorAdmin.css';
+import Topping from '../Topping';
 
 const PizzaCreatorAdmin = () => (
-  <div>
-    <Sidebar/>
+  <div className="app">
+    <Sidebar />
     <div className='content'>
-      hello world
+      <Topping />
     </div>
   </div>
-  
-)
+);
 
 export default PizzaCreatorAdmin;

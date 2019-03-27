@@ -1,0 +1,5 @@
+.form-items {
+  display: grid;
+  grid-template-columns: repeat(3, 200px);
+  grid-gap: 1rem;
+}

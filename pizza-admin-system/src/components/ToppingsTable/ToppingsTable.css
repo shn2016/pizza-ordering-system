@@ -1,0 +1,12 @@
+table.toppings {
+  width: 100%;
+}
+
+table.toppings th {
+  text-align: left;
+}
+
+table.toppings td > img {
+  width: 50px;
+  height: 50px;
+}
