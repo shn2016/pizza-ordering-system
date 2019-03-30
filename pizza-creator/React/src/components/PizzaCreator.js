@@ -1,5 +1,5 @@
 import React from 'react';
-import Form from './Form';
+import Section from './Section';
 import Sizes from './Sizes';
 import Toppings from './Toppings';
 import Summary from './Summary';
@@ -7,32 +7,32 @@ import ConfirmationModal from './ConfirmationModal';
 import Button from "./Button";
 import toppings from '../data/toppings';
 import pizzaSizes from '../data/sizes';
-import customer from '../data/customer';
-
+import getTotal from '../helper/getTotal'
+import DetailsForm from './DetailsForm';
 export default class PizzaCreator extends React.Component  { 
 
   constructor(props){
       super(props);
 
       this.state = {
-      customer,
       pizzaSizes,
       selectedSize:null,
       toppings,
       selectedToppings: [],
-      isDisplayConfirmationModal: false,
+      detailsFormData: {},
+      detailsFormDirty: false,
+      showConfirmationModal: false,
     };
 
     this.onToppingClick = this.onToppingClick.bind(this); 
     this.onMinusToppingClick = this.onMinusToppingClick.bind(this); 
     this.onAddToppingClick = this.onAddToppingClick.bind(this); 
-    this.onFormChange = this.onFormChange.bind(this); 
+    this.onDetailsFormDataChange = this.onDetailsFormDataChange.bind(this); 
     this.onPizzaSizeSelected = this.onPizzaSizeSelected.bind(this); 
     this.validatingInputRequirement = this.validatingInputRequirement.bind(this); 
     this.onCancelButtonClick = this.onCancelButtonClick.bind(this); 
     this.onResetButtonClick = this.onResetButtonClick.bind(this); 
     this.onPlaceButtonClick = this.onPlaceButtonClick.bind(this); 
-
   }; 
 
   //#region
@@ -105,18 +105,16 @@ export default class PizzaCreator extends React.Component  {
     })
   }
 
-  onFormChange(column, value){
-    const { customer } = this.state;
-    const newCustomer = {};
-    Object.keys(customer).forEach(element => {
-      if(element === column){
-        newCustomer[element] = value;
-      } else {
-        newCustomer[element] = customer[element]
-      }
-    });
+  onDetailsFormDataChange(name, value){
+    const { detailsFormData } = this.state;
+
+    const newDetailsFormData = {
+      ...detailsFormData,
+      [name]: value,
+    };
+
     this.setState({
-      customer: newCustomer,
+      detailsFormData: newDetailsFormData,
     });
   }
   
@@ -140,13 +138,13 @@ export default class PizzaCreator extends React.Component  {
 
     if(isAlert){
       alert(message);
-      this.state.isDisplayConfirmationModal = false;
+      this.state.showConfirmationModal = false;
     }
     
     if (selectedSize === null) {
       isAlert = true;
       alert('Please select a pizza.');
-      this.state.isDisplayConfirmationModal = false;
+      this.state.showConfirmationModal = false;
     }
 
     return isAlert;
@@ -154,7 +152,7 @@ export default class PizzaCreator extends React.Component  {
 
   onCancelButtonClick(){
     this.setState({
-      isDisplayConfirmationModal: false,
+      showConfirmationModal: false,
     });
   };
 
@@ -173,58 +171,74 @@ export default class PizzaCreator extends React.Component  {
     })
   }
 
+  validateDetailsFormData(data) {
+    return Object.values(data).every(v => !!v);
+  }
+
   onPlaceButtonClick(){
+    const { detailsFormData } = this.state;
+
+    event.preventDefault();
+    
     this.setState({
-      isDisplayConfirmationModal: true,
+      detailsFormDirty: true,
+    });
+      
+    const validate = this.validateDetailsFormData(detailsFormData);
+
+    if (!validate) {
+      return;
+    }
+
+    this.setState({ 
+      showConfirmationModal: true 
     });
   }
   //#endregion
 
   render(){
     const { 
-      customer,
       pizzaSizes,
       selectedSize,
       toppings,
+      detailsFormData,
+      detailsFormDirty,
       selectedToppings,
-      isDisplayConfirmationModal,
+      showConfirmationModal,
     } = this.state;
 
     return (
       <React.Fragment>
-        {isDisplayConfirmationModal && !this.validatingInputRequirement() &&
-        (<ConfirmationModal
-          selectedSize = {selectedSize}
-          selectedToppings = {selectedToppings}
-          customer = {customer}
-          onCancelButtonClick  = {this.onCancelButtonClick}
+        {showConfirmationModal&&
+        (<ConfirmationModal 
+          details={detailsFormData}
+          selectedSize={selectedSize}
+          selectedToppings={selectedToppings}
+          onClose={() => this.setState({ showConfirmationModal: false })}
         />)
         }
-        <div className = "section">
-          <h1>Enter Your Details</h1>
-          <Form
-            customer = {customer}
-            onFormChange = {this.onFormChange}
+        <Section title='Enter Your Details'>
+          <DetailsForm
+            data = {detailsFormData} 
+            dirty = {detailsFormDirty}
+            onDataChange = {this.onDetailsFormDataChange}
           />
-        </div>
-        <div className = "section">
-          <h1>Pick Your Pizza</h1>
+        </Section>
+        <Section title='Pick Your Pizza'>
           <Sizes 
             pizzaSizes = {pizzaSizes}
             selectedSize = {selectedSize}
             onPizzaSizeSelected = {this.onPizzaSizeSelected}
           />
-        </div>
-        <div className = "section">
-          <h1>Pick Your Toppings</h1>
+        </Section>
+        <Section title='Pick Your Toppings'>
           <Toppings 
             toppings = {toppings}
             selectedToppings = {selectedToppings}
             onToppingClick  = {this.onToppingClick}
           />
-        </div>
-        <div className = "section">
-          <h1>Summary</h1>
+        </Section>
+        <Section title='Summary'>
           <Summary 
             selectedToppings = {selectedToppings}
             selectedSize = {selectedSize}
@@ -235,13 +249,13 @@ export default class PizzaCreator extends React.Component  {
           <div className = 'total'>
             Total: {getTotal({ selectedToppings, selectedSize })}
           </div>
-        </div>
-        <div className = "section">
+        </Section>
+        <Section title='Summary'>
           <Button 
             onPlaceButtonClick = {this.onPlaceButtonClick}
             onResetButtonClick = {this.onResetButtonClick}
           />
-        </div>
+        </Section>
       </React.Fragment>
     );
   }
