@@ -9,6 +9,7 @@ import toppings from '../data/toppings';
 import pizzaSizes from '../data/sizes';
 import getTotal from '../helper/getTotal'
 import DetailsForm from './DetailsForm';
+import PizzaViewer from './PizzaViewer';
 export default class PizzaCreator extends React.Component  { 
 
   constructor(props){
@@ -21,6 +22,7 @@ export default class PizzaCreator extends React.Component  {
       selectedToppings: [],
       detailsFormData: {},
       detailsFormDirty: false,
+      sizeError: false,
       showConfirmationModal: false,
     };
 
@@ -29,7 +31,6 @@ export default class PizzaCreator extends React.Component  {
     this.onAddToppingClick = this.onAddToppingClick.bind(this); 
     this.onDetailsFormDataChange = this.onDetailsFormDataChange.bind(this); 
     this.onPizzaSizeSelected = this.onPizzaSizeSelected.bind(this); 
-    this.validatingInputRequirement = this.validatingInputRequirement.bind(this); 
     this.onCancelButtonClick = this.onCancelButtonClick.bind(this); 
     this.onResetButtonClick = this.onResetButtonClick.bind(this); 
     this.onPlaceButtonClick = this.onPlaceButtonClick.bind(this); 
@@ -119,36 +120,13 @@ export default class PizzaCreator extends React.Component  {
   }
   
   onPizzaSizeSelected(pizzaSize){
+    const { selectedSize } = this.state;
+    const newSize = (selectedSize === pizzaSize) ? null : pizzaSize;
     this.setState({
-      selectedSize: pizzaSize
+      selectedSize: newSize,
+      sizeError: false,
     })
   }
-
-  validatingInputRequirement(){
-    let isAlert = false;
-    let message = 'Warning: Please fill up the follow input box: ';
-    
-    const { selectedSize, customer } = this.state;
-    Object.keys(customer).forEach( column => {
-      if(customer[column] === null){
-        message += `\n ${column} `;
-        isAlert = true;
-      }
-    });
-
-    if(isAlert){
-      alert(message);
-      this.state.showConfirmationModal = false;
-    }
-    
-    if (selectedSize === null) {
-      isAlert = true;
-      alert('Please select a pizza.');
-      this.state.showConfirmationModal = false;
-    }
-
-    return isAlert;
-  };
 
   onCancelButtonClick(){
     this.setState({
@@ -176,7 +154,7 @@ export default class PizzaCreator extends React.Component  {
   }
 
   onPlaceButtonClick(){
-    const { detailsFormData } = this.state;
+    const { detailsFormData, selectedSize } = this.state;
 
     event.preventDefault();
     
@@ -184,12 +162,17 @@ export default class PizzaCreator extends React.Component  {
       detailsFormDirty: true,
     });
       
-    const validate = this.validateDetailsFormData(detailsFormData);
+    let validate = this.validateDetailsFormData(detailsFormData);
 
     if (!validate) {
       return;
     }
-
+    if(!selectedSize) {
+      this.setState({
+        sizeError: true,
+      });
+      return;
+    }
     this.setState({ 
       showConfirmationModal: true 
     });
@@ -205,57 +188,64 @@ export default class PizzaCreator extends React.Component  {
       detailsFormDirty,
       selectedToppings,
       showConfirmationModal,
+      sizeError,
     } = this.state;
 
     return (
       <React.Fragment>
         {showConfirmationModal&&
-        (<ConfirmationModal 
-          details={detailsFormData}
-          selectedSize={selectedSize}
-          selectedToppings={selectedToppings}
-          onClose={() => this.setState({ showConfirmationModal: false })}
-        />)
+          (<ConfirmationModal 
+            details={detailsFormData}
+            selectedSize={selectedSize}
+            selectedToppings={selectedToppings}
+            onClose={() => this.setState({ showConfirmationModal: false })}
+          />)
         }
-        <Section title='Enter Your Details'>
-          <DetailsForm
-            data = {detailsFormData} 
-            dirty = {detailsFormDirty}
-            onDataChange = {this.onDetailsFormDataChange}
-          />
-        </Section>
-        <Section title='Pick Your Pizza'>
-          <Sizes 
-            pizzaSizes = {pizzaSizes}
-            selectedSize = {selectedSize}
-            onPizzaSizeSelected = {this.onPizzaSizeSelected}
-          />
-        </Section>
-        <Section title='Pick Your Toppings'>
-          <Toppings 
-            toppings = {toppings}
-            selectedToppings = {selectedToppings}
-            onToppingClick  = {this.onToppingClick}
-          />
-        </Section>
-        <Section title='Summary'>
-          <Summary 
-            selectedToppings = {selectedToppings}
-            selectedSize = {selectedSize}
-            onAddToppingClick = {this.onAddToppingClick}
-            onMinusToppingClick = {this.onMinusToppingClick}
-          />
-          <hr/>
-          <div className = 'total'>
-            Total: {getTotal({ selectedToppings, selectedSize })}
-          </div>
-        </Section>
-        <Section title='Summary'>
-          <Button 
-            onPlaceButtonClick = {this.onPlaceButtonClick}
-            onResetButtonClick = {this.onResetButtonClick}
-          />
-        </Section>
+        <PizzaViewer
+          selectedToppings = {selectedToppings}
+        />
+        <div className='main'>
+          <Section title='Enter Your Details'>
+            <DetailsForm
+              data = {detailsFormData} 
+              dirty = {detailsFormDirty}
+              onDataChange = {this.onDetailsFormDataChange}
+            />
+          </Section>
+          <Section title='Pick Your Pizza'>
+            <Sizes 
+              pizzaSizes = {pizzaSizes}
+              selectedSize = {selectedSize}
+              sizeError = {sizeError}
+              onPizzaSizeSelected = {this.onPizzaSizeSelected}
+            />
+          </Section>
+          <Section title='Pick Your Toppings'>
+            <Toppings 
+              toppings = {toppings}
+              selectedToppings = {selectedToppings}
+              onToppingClick  = {this.onToppingClick}
+            />
+          </Section>
+          <Section title='Summary'>
+            <Summary 
+              selectedToppings = {selectedToppings}
+              selectedSize = {selectedSize}
+              onAddToppingClick = {this.onAddToppingClick}
+              onMinusToppingClick = {this.onMinusToppingClick}
+            />
+            <hr/>
+            <div className = 'total'>
+              Total: {getTotal({ selectedToppings, selectedSize })}
+            </div>
+          </Section>
+          <Section title='Summary'>
+            <Button 
+              onPlaceButtonClick = {this.onPlaceButtonClick}
+              onResetButtonClick = {this.onResetButtonClick}
+            />
+          </Section>
+        </div>
       </React.Fragment>
     );
   }

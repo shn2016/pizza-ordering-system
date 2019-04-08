@@ -43,7 +43,7 @@ export default class DetailsForm extends React.Component {
           value={data.name}
           formDirty={dirty}
           validate={data.name}
-          onChange={value => onDataChange('name', value)}
+          onDataChange={value => onDataChange('name', value)}
           validationMessage="Please enter your name"
         />
         <Input 
@@ -51,7 +51,7 @@ export default class DetailsForm extends React.Component {
           value={data.email}
           formDirty={dirty}
           validate={!getValidationMessageForEmail(data.email)}
-          onChange={value => onDataChange('email', value)}
+          onDataChange={value => onDataChange('email', value)}
           validationMessage={getValidationMessageForEmail(data.email)}
         />
         <Input 
@@ -59,7 +59,7 @@ export default class DetailsForm extends React.Component {
           value={data.confirmEmail}
           formDirty={dirty}
           validate={!confirmEmailValidationMessage}
-          onChange={value => onDataChange('confirmEmail', value)}
+          onDataChange={value => onDataChange('confirmEmail', value)}
           validationMessage={confirmEmailValidationMessage}
         />
         <Input 
@@ -67,7 +67,7 @@ export default class DetailsForm extends React.Component {
           value={data.address}
           formDirty={dirty}
           validate={data.address}
-          onChange={value => onDataChange('address', value)}
+          onDataChange={value => onDataChange('address', value)}
           validationMessage="Please enter your Address"
         />
         <Input 
@@ -75,7 +75,7 @@ export default class DetailsForm extends React.Component {
           value={data.postCode}
           formDirty={dirty}
           validate={data.postCode}
-          onChange={value => onDataChange('postCode', value)}
+          onDataChange={value => onDataChange('postCode', value)}
           validationMessage="Please enter your Post Code"
         />
         <Input 
@@ -83,7 +83,7 @@ export default class DetailsForm extends React.Component {
           value={data.contactNumber}
           formDirty={dirty}
           validate={data.contactNumber}
-          onChange={value => onDataChange('contactNumber', value)}
+          onDataChange={value => onDataChange('contactNumber', value)}
           validationMessage="Please enter your Contact Number"
         />
       </div>

@@ -12,13 +12,13 @@ export default class Input extends React.Component {
   }
 
   onChange({ target: { value } }) {
-    const { onChange } = this.props;
+    const { onDataChange } = this.props;
 
     this.setState({
       dirty: true,
     });
 
-    onChange(value);   
+    onDataChange(value);   
   }
   
   render() {
