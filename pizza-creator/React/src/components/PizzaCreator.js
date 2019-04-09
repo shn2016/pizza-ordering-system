@@ -39,20 +39,15 @@ export default class PizzaCreator extends React.Component  {
   //#region
   onToppingClick(topping) {
 
-    const { selectedToppings, selectedSize, pizzaSizes } = this.state;
+    const { selectedToppings } = this.state;
     const isExists = this.state.selectedToppings.find(({ name }) => name === topping.name);
 
     const newSelectedToppings = !isExists 
       ? [{ ...topping, amount: 1 }, ...selectedToppings] 
       : selectedToppings.filter(({ name }) => name !== topping.name);
-    
-    const newSelectedSize = selectedSize
-    ? selectedSize
-    : pizzaSizes[2];
 
     this.setState({
       selectedToppings : newSelectedToppings,
-      selectedSize: newSelectedSize,
     });
   };
 
@@ -150,6 +145,7 @@ export default class PizzaCreator extends React.Component  {
   }
 
   validateDetailsFormData(data) {
+    if(Object.keys(data).length !== 6 ) return false;
     return Object.values(data).every(v => !!v);
   }
 
@@ -163,7 +159,7 @@ export default class PizzaCreator extends React.Component  {
     });
       
     let validate = this.validateDetailsFormData(detailsFormData);
-
+    console.log(validate);
     if (!validate) {
       return;
     }

@@ -9,26 +9,26 @@ body {
 .pizza-viewer {
   background: #3a424f;
 }
-.pizza {
+.pizza-container {
   width: 500px;
   height: 350px;
   position: relative;
 }
-.pizza > * {
+.pizza-container > * {
   position: absolute;
 }
-.pizza > .pizza-base {
+.pizza-container > .pizza-base {
   width: 75%;
   left: 90px;
 }
-.pizza > .pizza-toppings {
+.pizza-container > .pizza-toppings {
   width: 70%;
   left: 100px;
 }
-.pizza > .pizza-board {
+.pizza-container > .pizza-board {
   width: 100%;
 }
-.pizza img {
+.pizza-container img {
   margin: 100px 20px 0;
 }
 .pizza-toppings img {

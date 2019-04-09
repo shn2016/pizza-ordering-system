@@ -25,7 +25,7 @@ function getImg (name) {
 }
 const Previewer = ({ selectedToppings }) => (
   <div className="pizza-viewer">
-      <div className="pizza">
+      <div className="pizza-container">
         <div className="pizza-board">
           <img src={board} alt="Pizza board" />
         </div>
@@ -37,7 +37,7 @@ const Previewer = ({ selectedToppings }) => (
             return (
               <img
                 key={selectedTopping.name}
-                src={getImg(selectedTopping.name)}
+                src={`https://toddmotto.com/angular-pizza-creator/assets/toppings/${selectedTopping.name}.svg`}
                 alt={selectedTopping.name}
               />
             );

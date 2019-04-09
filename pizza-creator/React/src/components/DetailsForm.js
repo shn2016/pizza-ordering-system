@@ -18,6 +18,18 @@ function getValidationMessageForConfirmEmail(confirmEmail, email) {
   return '';
 }
 
+function getValidationMessageForNumber(value) {
+  if (!value) {
+    return 'Please enter this part';
+  }
+
+  if(isNaN(value)) {
+    return 'Please enter a valid number'
+  }
+
+  return '';
+}
+
 function getValidationMessageForEmail(email) {
   if (!email) {
     return 'Please enter your Email';
@@ -74,17 +86,17 @@ export default class DetailsForm extends React.Component {
           label="Post Code"
           value={data.postCode}
           formDirty={dirty}
-          validate={data.postCode}
+          validate={!getValidationMessageForNumber(data.postCode)}
           onDataChange={value => onDataChange('postCode', value)}
-          validationMessage="Please enter your Post Code"
+          validationMessage={getValidationMessageForNumber(data.postCode)}
         />
         <Input 
           label="Contact Number"
           value={data.contactNumber}
           formDirty={dirty}
-          validate={data.contactNumber}
+          validate={!getValidationMessageForNumber(data.contactNumber)}
           onDataChange={value => onDataChange('contactNumber', value)}
-          validationMessage="Please enter your Contact Number"
+          validationMessage={getValidationMessageForNumber(data.contactNumber)}
         />
       </div>
     );
